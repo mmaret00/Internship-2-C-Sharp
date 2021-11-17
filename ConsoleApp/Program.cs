@@ -234,6 +234,94 @@ namespace ConsoleApp
 
 
 
+
+
+
+                    case 6:
+
+                        Console.WriteLine("Unesi ime i prezime: ");
+                        string deleteName = "";
+                        string OIBToDelete = "";
+
+                        do
+                        {
+                            repeat = 1;
+
+                            deleteName = (Console.ReadLine());
+
+                            foreach (var character in deleteName)
+                            {
+                                if (' ' == character)
+                                {
+                                    repeat = 0;
+                                }
+                            }
+
+                            if (1 == repeat)
+                                Console.WriteLine("Pogrešno uneseno ime i prezime! Unesi ga opet: ");
+
+                        } while (0 != repeat);
+
+
+                        Console.WriteLine("Unesi datum rođenja (dan, mjesec, godina, sat:minuta:sekunda):");
+                        DateTime deleteDate;
+
+                        do
+                        {
+                            repeat = 0;
+                            deleteDate = DateTime.Parse(Console.ReadLine());
+
+                            if (deleteDate > DateTime.Now)
+                            {
+                                repeat = 1;
+                                Console.WriteLine("Unesen je datum koji se još nije dogodio, unesite ispravan datum rođenja: ");
+                            }
+
+                        } while (0 != repeat);
+
+                        int sameNameAndDate = 0;
+
+                        foreach (var item in census)
+                        {
+                            if (deleteName == item.Value.nameAndSurname && deleteDate == item.Value.dateOfBirth)
+                            {
+                                sameNameAndDate++;
+                                OIBToDelete = item.Key;
+
+                                //census.Remove(OIBToDelete);
+                                //Console.WriteLine("Osoba " + item.Value.nameAndSurname + " rođena " + item.Value.dateOfBirth + " je obrisana.");
+                            }
+                            //else if (deleteName != item.Value.nameAndSurname || deleteDate != item.Value.dateOfBirth)
+                               // Console.WriteLine("Ne postoji osoba s tim imenom rođena na taj datum.");
+                        }
+
+                        if(0 == sameNameAndDate)
+                            Console.WriteLine("Ne postoji osoba s tim imenom rođena na taj datum.");
+                        else if(1 == sameNameAndDate)
+                        {
+                            census.Remove(OIBToDelete);
+                            Console.WriteLine("Osoba " + deleteName + " rođena " + deleteDate + " je obrisana.");
+                        }
+                        
+                        else if(sameNameAndDate > 1)
+                        {
+                            //pozvat funkciju za maknit po oibu
+                        }
+
+                        break;
+
+                    case 7:
+
+                        foreach (var item in census)
+                        {
+                            census.Remove(item.Key);
+                        }
+                        Console.WriteLine("Svi stanovnici su obrisani.");
+
+                        break;
+
+
+
                     case 0:
                         exit = 1;
                         break;
