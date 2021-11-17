@@ -13,7 +13,7 @@ namespace ConsoleApp
 
             };
 
-            int exit = 0, repeat = 0; ;
+            int exit = 0, repeat = 0, subchoice = 0;
 
             while (1 != exit)
             {
@@ -321,6 +321,40 @@ namespace ConsoleApp
                         break;
 
 
+                    case 8:
+
+                        Console.WriteLine("1 - Uredi OIB stanovnika");
+                        Console.WriteLine("2 - Uredi ime i prezime stanovnika");
+                        Console.WriteLine("3 - Uredi datum rođenja");
+
+                        subchoice = int.Parse(Console.ReadLine());
+
+                        switch (subchoice)
+                        {
+                            case 1:
+                                Console.WriteLine("Unesi OIB koji želiš promijeniti:");
+
+                                //dodat funkcije pa onda slozit
+                                break;
+
+
+                        }
+
+                        break;
+
+                    case 9:
+
+                        Console.WriteLine("1 - Postotak nezaposlenih (od 0 do 23 godine i od 65 do 100 godine) i postotak zaposlenih(od 23 do 65 godine)");
+                        Console.WriteLine("2 - Ispis najčešćeg imena i koliko ga stanovnika ima");
+                        Console.WriteLine("3 - Ispis najčešćeg prezimena i koliko ga stanovnika ima");
+                        Console.WriteLine("4 - Ispis datum na koji je rođen najveći broj ljudi i koji je to datum");
+                        Console.WriteLine("5 - Ispis broja ljudi rođenih u svakom od godišnjih doba (poredat godišnja doba s obzirom na broj ljudi rođenih u istim)");
+                        Console.WriteLine("6 - Ispis najmlađeg stanovnika");
+                        Console.WriteLine("7 - Ispis najstarijeg stanovnika");
+                        Console.WriteLine("8 - Prosječan broj godina (na 2 decimale)");
+                        Console.WriteLine("9 - Medijan godina");
+
+                        break;
 
                     case 0:
                         exit = 1;
