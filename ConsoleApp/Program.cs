@@ -156,6 +156,7 @@ namespace ConsoleApp
 
                         if (0 == sameNameAndDate)
                             Console.WriteLine("Ne postoji osoba s tim imenom rođena na taj datum.");
+
                         else if (1 == sameNameAndDate)
                         {
                             census.Remove(OIBToDelete);
@@ -164,7 +165,15 @@ namespace ConsoleApp
 
                         else if (sameNameAndDate > 1)
                         {
-                            //pozvat funkciju za maknit po oibu
+                            Console.WriteLine("Postoji više ljudi s tim imenom rođeni na taj dan. Njihovi OIB-i su:");
+                            foreach (var item in census)
+                                if (deleteName == item.Value.nameAndSurname && deleteDate == item.Value.dateOfBirth)
+                                    Console.WriteLine(item.Key);
+
+                            Console.WriteLine("Upiši OIB osobe koju želiš obrisati:");
+                            OIBToDelete = (Console.ReadLine());
+                            census.Remove(OIBToDelete);
+                            Console.WriteLine("Osoba " + deleteName + " rođena " + deleteDate + " s OIB-om " + OIBToDelete + " je obrisana.");
                         }
 
                         break;
