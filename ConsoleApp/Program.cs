@@ -5,15 +5,10 @@ namespace ConsoleApp
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-
-            var census = new Dictionary<string, (string nameAndSurname, DateTime dateOfBirth)>()
-            {
-
-            };
-
-            int exit = 0, repeat = 0, subchoice = 0;
+            var census = new Dictionary<string, (string nameAndSurname, DateTime dateOfBirth)>(){};
+            int exit = 0;
 
             while (1 != exit)
             {
@@ -35,233 +30,33 @@ namespace ConsoleApp
                 switch (choice)
                 {
                     case 1:
-                        Console.WriteLine("Stanovništvo:");
-                        Console.WriteLine("OIB:\tIme i prezime:\tDatum rođenja:");
-                        foreach (var item in census)
-                        {
-                            Console.WriteLine(item.Key + "\t" + item.Value.nameAndSurname + "\t" + item.Value.dateOfBirth);
-                        }
+                        Print_Population(census);
                         break;
-
                     case 2:
-                        Console.WriteLine("Unesi OIB: ");
-                        string findOIB = OIB_Length_Check(census);
-
-
-                        foreach (var item in census)
-                        {
-                            if (findOIB == item.Key)
-                            {
-                                Console.WriteLine("Osoba s OIB-om " + findOIB + ":");
-                                Console.WriteLine("Ime i prezime:\tDatum rođenja:");
-                                Console.WriteLine(item.Value.nameAndSurname + "\t" + item.Value.dateOfBirth);
-                            }
-                            else
-                                Console.WriteLine("Ne postoji osoba s tim OIB-om.");
-                        }
-
+                        Print_Person_OIB(census);
                         break;
-
                     case 3:
-                        Console.WriteLine("Unesi ime i prezime: ");
-                        string findName = Name_Space_Check(census);
-
-                        Console.WriteLine("Unesi datum rođenja (dan, mjesec, godina, sat:minuta:sekunda):");
-                        DateTime findDate = Date_Check(census);
-
-                        foreach (var item in census)
-                        {
-                            if (findName == item.Value.nameAndSurname && findDate == item.Value.dateOfBirth)
-                            {
-                                Console.WriteLine("OIB osobe " + findName + " rođene " + findDate + ":");
-                                Console.WriteLine(item.Key);
-                            }
-                            else if (findName != item.Value.nameAndSurname || findDate != item.Value.dateOfBirth)
-                                Console.WriteLine("Ne postoji osoba s tim imenom rođena na taj datum.");
-                        }
-
+                        Print_Person_Name_Date(census);
                         break;
-
                     case 4:
-                        Console.WriteLine("Unesi OIB:");
-                        string newOIB = "";
-
-                        do
-                        {
-                            repeat = 0;
-                            newOIB = OIB_Length_Check(census);
-
-                            if (census.ContainsKey(newOIB))
-                            {
-                                Console.WriteLine("Isti OIB već postoji! Unesite ispočetka: ");
-                                repeat = 1;
-                            }
-                        } while (0 != repeat);
-
-
-                        Console.WriteLine("Unesi ime i prezime:");
-                        var nameAndSurname = Name_Space_Check(census);
-
-                        Console.WriteLine("Unesi datum rođenja (dan, mjesec, godina, sat:minuta:sekunda):");
-                        DateTime dateOfBirth = Date_Check(census);
-
-                        census.Add(newOIB, (nameAndSurname, dateOfBirth));
+                        New_Entry(census);
                         break;
-
-
                     case 5:
-                        Console.WriteLine("Unesi OIB:");
-                        string deleteOIB = OIB_Length_Check(census);
-                        repeat = 1;
-
-                        if (census.ContainsKey(deleteOIB))
-                        {
-                            repeat = 0;
-                        }
-
-                        if (1 == repeat)
-                            Console.WriteLine("Ne postoji osoba s tim OIB-om.");
-
-                        foreach (var item in census)
-                        {
-                            if (deleteOIB == item.Key)
-                            {
-                                census.Remove(deleteOIB);
-                                Console.WriteLine("Osoba " + item.Value.nameAndSurname + " rođena " + item.Value.dateOfBirth + " je obrisana.");
-                            }
-                        }
-
+                        Delete_OIB(census);
                         break;
-
                     case 6:
-
-                        Console.WriteLine("Unesi ime i prezime: ");
-                        string deleteName = Name_Space_Check(census);
-                        string OIBToDelete = "";
-
-                        Console.WriteLine("Unesi datum rođenja (dan, mjesec, godina, sat:minuta:sekunda):");
-                        DateTime deleteDate = Date_Check(census);
-
-                        int sameNameAndDate = 0;
-
-                        foreach (var item in census)
-                        {
-                            if (deleteName == item.Value.nameAndSurname && deleteDate == item.Value.dateOfBirth)
-                            {
-                                sameNameAndDate++;
-                                OIBToDelete = item.Key;
-
-                            }
-                        }
-
-                        if (0 == sameNameAndDate)
-                            Console.WriteLine("Ne postoji osoba s tim imenom rođena na taj datum.");
-
-                        else if (1 == sameNameAndDate)
-                        {
-                            census.Remove(OIBToDelete);
-                            Console.WriteLine("Osoba " + deleteName + " rođena " + deleteDate + " je obrisana.");
-                        }
-
-                        else if (sameNameAndDate > 1)
-                        {
-                            Console.WriteLine("Postoji više ljudi s tim imenom rođeni na taj dan. Njihovi OIB-i su:");
-                            foreach (var item in census)
-                                if (deleteName == item.Value.nameAndSurname && deleteDate == item.Value.dateOfBirth)
-                                    Console.WriteLine(item.Key);
-
-                            Console.WriteLine("Upiši OIB osobe koju želiš obrisati:");
-                            OIBToDelete = (Console.ReadLine());
-                            census.Remove(OIBToDelete);
-                            Console.WriteLine("Osoba " + deleteName + " rođena " + deleteDate + " s OIB-om " + OIBToDelete + " je obrisana.");
-                        }
-
+                        Delete_Name_Date(census);
                         break;
-
                     case 7:
-                        //probat clear
-                        foreach (var item in census)
-                        {
-                            census.Remove(item.Key);
-                        }
+                        census.Clear();
                         Console.WriteLine("Svi stanovnici su obrisani.");
-
                         break;
-
-
                     case 8:
-
-                        Console.WriteLine("1 - Uredi OIB stanovnika");
-                        Console.WriteLine("2 - Uredi ime i prezime stanovnika");
-                        Console.WriteLine("3 - Uredi datum rođenja");
-
-                        subchoice = int.Parse(Console.ReadLine());
-
-                        switch (subchoice)
-                        {
-                            case 1:
-                                Console.WriteLine("Unesi OIB koji želiš promijeniti:");
-                                string changeOIB = OIB_Length_Check(census);
-
-                                foreach (var item in census)
-                                {
-                                    if (changeOIB == item.Key) { }
-                                    //napravit
-                                }
-
-                                break;
-
-                            case 2:
-                                Console.WriteLine("Unesi OIB stanovnika kojem želiš promijeniti ime i prezime:");
-                                changeOIB = OIB_Length_Check(census);
-                                //napravit ovdi i u oibu provjeru jel osoba postoji
-                                foreach (var item in census)
-                                    if (changeOIB == item.Key)
-                                    {
-                                        Console.WriteLine("Mijenja se ime i prezime osobe " + item.Value.nameAndSurname + " rođene " + item.Value.dateOfBirth + ".");
-                                        Console.WriteLine("Unesi novo ime:");
-                                        string newName = Name_Space_Check(census);
-                                        census[item.Key] = (newName, item.Value.dateOfBirth);
-                                        Console.WriteLine("Ime je promijenjeno u " + newName + ".");
-                                    }
-
-                                break;
-
-                            case 3:
-                                Console.WriteLine("Unesi OIB stanovnika kojem želiš promijeniti datum rođenja:");
-                                changeOIB = OIB_Length_Check(census);
-
-                                foreach (var item in census)
-                                    if (changeOIB == item.Key)
-                                    {
-                                        Console.WriteLine("Mijenja se datum rođenja osobe " + item.Value.nameAndSurname + " rođene " + item.Value.dateOfBirth + ".");
-                                        Console.WriteLine("Unesi novi datum rođenja:");
-                                        DateTime newDate = Date_Check(census);
-                                        census[item.Key] = (item.Value.nameAndSurname, newDate);
-                                        Console.WriteLine("Datum rođenja je promijenjen u " + newDate + ".");
-                                    }
-
-                                break;
-                        }
-
+                        Change_Person(census);
                         break;
-
                     case 9:
-
-                        Console.WriteLine("1 - Postotak nezaposlenih (od 0 do 23 godine i od 65 do 100 godine) i postotak zaposlenih(od 23 do 65 godine)");
-                        Console.WriteLine("2 - Ispis najčešćeg imena i koliko ga stanovnika ima");
-                        Console.WriteLine("3 - Ispis najčešćeg prezimena i koliko ga stanovnika ima");
-                        Console.WriteLine("4 - Ispis datum na koji je rođen najveći broj ljudi i koji je to datum");
-                        Console.WriteLine("5 - Ispis broja ljudi rođenih u svakom od godišnjih doba (poredat godišnja doba s obzirom na broj ljudi rođenih u istim)");
-                        Console.WriteLine("6 - Ispis najmlađeg stanovnika");
-                        Console.WriteLine("7 - Ispis najstarijeg stanovnika");
-                        Console.WriteLine("8 - Prosječan broj godina (na 2 decimale)");
-                        Console.WriteLine("9 - Medijan godina");
-
-                        OldestPerson(census);
-
+                        Statistics(census);
                         break;
-
                     case 0:
                         exit = 1;
                         break;
@@ -269,11 +64,11 @@ namespace ConsoleApp
             }
         }
 
-        static string OIB_Length_Check(Dictionary<string, (string, DateTime)> census)
+        static string OIB_Length_Check()
         {
 
-            var repeat = 0;
-            var findOIB = "";
+            int repeat;
+            string findOIB;
 
             do
             {
@@ -290,11 +85,11 @@ namespace ConsoleApp
             return findOIB;
         }
 
-        static string Name_Space_Check(Dictionary<string, (string, DateTime)> census)
+        static string Name_Space_Check()
         {
 
-            string findName = "";
-            int repeat = 1;
+            string findName;
+            int repeat;
 
             do
             {
@@ -318,10 +113,10 @@ namespace ConsoleApp
             return findName;
         }
 
-        static DateTime Date_Check(Dictionary<string, (string, DateTime)> census)
+        static DateTime Date_Check()
         {
 
-            int repeat = 0;
+            int repeat;
             DateTime dateOfBirth;
 
             do
@@ -345,9 +140,9 @@ namespace ConsoleApp
             int unemployed = 0, employed = 0;
 
             foreach (var item in census)
-            {//dodat prijestupne godine
+            {
                 TimeSpan age = DateTime.Now - item.Value.Item2;
-                if (age.Days > (23 * 365) && age.Days < (65 * 365)) employed++;
+                if (age.Days > (23 * 365.25) && age.Days < (65 * 365.25)) employed++;
                 else unemployed++;
             }
             Console.WriteLine("Postotak zaposlenih je " + (float)employed/(census.Count)*100 + "%, a postotak nezaposlenih je " + (float)unemployed / (census.Count) *100 + "%.");
@@ -369,7 +164,7 @@ namespace ConsoleApp
             }
         }
 
-        static void YoungestPerson(Dictionary<string, (string, DateTime)> census)
+        static void Youngest_Person(Dictionary<string, (string, DateTime)> census)
         {//mozda dodat OIB ovdi i kod najstarijih
             var minDays = 200 * 365; // vidit kako bolje
             var YoungestSoFar = ("", DateTime.Now);
@@ -384,10 +179,10 @@ namespace ConsoleApp
                 }
             }
 
-            Console.WriteLine("Najmlađi stanovnik je " + YoungestSoFar.Item1 + ", rođen " + YoungestSoFar.Item2 + ".");
+            Console.WriteLine("Najmlađi stanovnik je " + YoungestSoFar.Item1 + ", rođen " + YoungestSoFar.Now + ".\n");
         }
 
-        static void OldestPerson(Dictionary<string, (string, DateTime)> census)
+        static void Oldest_Person(Dictionary<string, (string, DateTime)> census)
         {
             var maxDays = 0; // vidit kako bolje
             var OldestSoFar = ("", DateTime.Now);
@@ -402,14 +197,300 @@ namespace ConsoleApp
                 }
             }
 
-            Console.WriteLine("Najstariji stanovnik je " + OldestSoFar.Item1 + ", rođen " + OldestSoFar.Item2 + ".");
+            Console.WriteLine("Najstariji stanovnik je " + OldestSoFar.Item1 + ", rođen " + OldestSoFar.Now + ".\n");
         }
 
-        static void AverageAge(Dictionary<string, (string, DateTime)> census)
+        static void Average_Age(Dictionary<string, (string, DateTime)> census)
         {
+            int daysOldTotal = 0;
+            TimeSpan age;
+
             foreach (var item in census)
             {
-                //popodne napravit
+                age = DateTime.Now - item.Value.Item2;
+                daysOldTotal += age.Days;
+            }
+
+            var yearsAvg = (double)(daysOldTotal / census.Count) / 365.25;
+            Console.WriteLine("Prosjek godina stanovništva je " + Math.Truncate(100 * yearsAvg) / 100);
+        }
+
+        static void Median_Age(Dictionary<string, (string, DateTime)> census)
+        {
+            //nakon sta skuzin sortiranje
+        }
+
+        static void Print_Population(Dictionary<string, (string, DateTime)> census)
+        {
+            Console.WriteLine("Stanovništvo:");
+            Console.WriteLine("OIB:\tIme i prezime:\tDatum rođenja:");
+            foreach (var item in census)
+            {
+                Console.WriteLine(item.Key + "\t" + item.Value.Item1 + "\t" + item.Value.Item2);
+            }
+        }
+
+        static void Print_Person_OIB(Dictionary<string, (string, DateTime)> census)
+        {
+            Console.WriteLine("Unesi OIB: ");
+            string findOIB = OIB_Length_Check();
+
+
+            foreach (var item in census)
+            {
+                if (findOIB == item.Key)
+                {
+                    Console.WriteLine("Osoba s OIB-om " + findOIB + ":");
+                    Console.WriteLine("Ime i prezime:\tDatum rođenja:");
+                    Console.WriteLine(item.Value.Item1 + "\t" + item.Value.Item2);
+                }
+                else
+                    Console.WriteLine("Ne postoji osoba s tim OIB-om.");
+            }
+        }
+
+        static void Print_Person_Name_Date(Dictionary<string, (string, DateTime)> census)
+        {
+            Console.WriteLine("Unesi ime i prezime: ");
+            string findName = Name_Space_Check();
+
+            Console.WriteLine("Unesi datum rođenja (dan, mjesec, godina, sat:minuta:sekunda):");
+            DateTime findDate = Date_Check();
+
+            foreach (var item in census)
+            {
+                if (findName == item.Value.Item1 && findDate == item.Value.Item2)
+                {
+                    Console.WriteLine("OIB osobe " + findName + " rođene " + findDate + ":");
+                    Console.WriteLine(item.Key);
+                }
+                else if (findName != item.Value.Item1 || findDate != item.Value.Item2)
+                    Console.WriteLine("Ne postoji osoba s tim imenom rođena na taj datum.");
+            }
+        }
+
+        static void New_Entry(Dictionary<string, (string, DateTime)> census)
+        {
+            Console.WriteLine("Unesi OIB:");
+            string newOIB;
+            int repeat;
+
+            do
+            {
+                repeat = 0;
+                newOIB = OIB_Length_Check();
+
+                if (census.ContainsKey(newOIB))
+                {
+                    Console.WriteLine("Isti OIB već postoji! Unesite ispočetka: ");
+                    repeat = 1;
+                }
+            } while (0 != repeat);
+
+
+            Console.WriteLine("Unesi ime i prezime:");
+            var nameAndSurname = Name_Space_Check();
+
+            Console.WriteLine("Unesi datum rođenja (dan, mjesec, godina, sat:minuta:sekunda):");
+            DateTime dateOfBirth = Date_Check();
+
+            census.Add(newOIB, (nameAndSurname, dateOfBirth));
+        }
+
+        static void Delete_OIB(Dictionary<string, (string, DateTime)> census)
+        {
+            Console.WriteLine("Unesi OIB:");
+            string deleteOIB = OIB_Length_Check();
+            int repeat = 1;
+
+            if (census.ContainsKey(deleteOIB))
+            {
+                repeat = 0;
+            }
+
+            if (1 == repeat)
+                Console.WriteLine("Ne postoji osoba s tim OIB-om.");
+
+            foreach (var item in census)
+            {
+                if (deleteOIB == item.Key)
+                {
+                    census.Remove(deleteOIB);
+                    Console.WriteLine("Osoba " + item.Value.Item1 + " rođena " + item.Value.Item2 + " je obrisana.");
+                }
+            }
+        }
+
+        static void Delete_Name_Date(Dictionary<string, (string, DateTime)> census)
+        {
+            Console.WriteLine("Unesi ime i prezime: ");
+            string deleteName = Name_Space_Check();
+            string OIBToDelete = "";
+
+            Console.WriteLine("Unesi datum rođenja (dan, mjesec, godina, sat:minuta:sekunda):");
+            DateTime deleteDate = Date_Check();
+
+            int sameNameAndDate = 0;
+
+            foreach (var item in census)
+            {
+                if (deleteName == item.Value.Item1 && deleteDate == item.Value.Item2)
+                {
+                    sameNameAndDate++;
+                    OIBToDelete = item.Key;
+
+                }
+            }
+
+            if (0 == sameNameAndDate)
+                Console.WriteLine("Ne postoji osoba s tim imenom rođena na taj datum.");
+
+            else if (1 == sameNameAndDate)
+            {
+                census.Remove(OIBToDelete);
+                Console.WriteLine("Osoba " + deleteName + " rođena " + deleteDate + " je obrisana.");
+            }
+
+            else if (sameNameAndDate > 1)
+            {
+                Console.WriteLine("Postoji više ljudi s tim imenom rođeni na taj dan. Njihovi OIB-i su:");
+                foreach (var item in census)
+                    if (deleteName == item.Value.Item1 && deleteDate == item.Value.Item2)
+                        Console.WriteLine(item.Key);
+
+                Console.WriteLine("Upiši OIB osobe koju želiš obrisati:");
+                OIBToDelete = (Console.ReadLine());
+                census.Remove(OIBToDelete);
+                Console.WriteLine("Osoba " + deleteName + " rođena " + deleteDate + " s OIB-om " + OIBToDelete + " je obrisana.");
+            }
+        }
+
+        static void Change_Person(Dictionary<string, (string, DateTime)> census)
+        {
+            Console.WriteLine("1 - Uredi OIB stanovnika");
+            Console.WriteLine("2 - Uredi ime i prezime stanovnika");
+            Console.WriteLine("3 - Uredi datum rođenja");
+
+            int subchoice = int.Parse(Console.ReadLine());
+
+            switch (subchoice)
+            {
+                case 1:
+                    Console.WriteLine("Unesi OIB koji želiš promijeniti:");
+                    string changeOIB = OIB_Length_Check();
+                    int changeIt = 0;
+                    string newOIB = "";
+                    string tempName = "";
+                    DateTime tempDate = new DateTime();
+
+                    if (census.ContainsKey(changeOIB))
+                    {
+                        foreach (var item in census)
+                            if (changeOIB == item.Key)
+                            {
+                                Console.WriteLine("Mijenja se OIB osobe " + item.Value.Item1 + " rođene " + item.Value.Item2 + ".");
+                                Console.WriteLine("Unesi novi OIB:");
+                                newOIB = OIB_Length_Check();
+                                tempName = item.Value.Item1;
+                                tempDate = item.Value.Item2;
+                                changeIt = 1;
+                            }
+                    }
+                    else Console.WriteLine("Ne postoji osoba s tim OIB-om.");
+
+                    if (1 == changeIt)
+                    {
+                        census.Remove(changeOIB);
+                        census.Add(newOIB, (tempName, tempDate));
+                        Console.WriteLine("OIB je promijenjen.");
+                    }
+
+                    break;
+
+                case 2:
+                    Console.WriteLine("Unesi OIB stanovnika kojem želiš promijeniti ime i prezime:");
+                    changeOIB = OIB_Length_Check();
+
+                    if (census.ContainsKey(changeOIB))
+                    {
+                        foreach (var item in census)
+                            if (changeOIB == item.Key)
+                            {
+                                Console.WriteLine("Mijenja se ime i prezime osobe " + item.Value.Item1 + " rođene " + item.Value.Item2 + ".");
+                                Console.WriteLine("Unesi novo ime:");
+                                string newName = Name_Space_Check();
+                                census[item.Key] = (newName, item.Value.Item2);
+                                Console.WriteLine("Ime je promijenjeno u " + newName + ".");
+                            }
+                    }
+                    else Console.WriteLine("Ne postoji osoba s tim OIB-om.");
+                    break;
+
+                case 3:
+                    Console.WriteLine("Unesi OIB stanovnika kojem želiš promijeniti datum rođenja:");
+                    changeOIB = OIB_Length_Check();
+
+                    if (census.ContainsKey(changeOIB))
+                    {
+                        foreach (var item in census)
+                            if (changeOIB == item.Key)
+                            {
+                                Console.WriteLine("Mijenja se datum rođenja osobe " + item.Value.Item1 + " rođene " + item.Value.Item2 + ".");
+                                Console.WriteLine("Unesi novi datum rođenja:");
+                                DateTime newDate = Date_Check();
+                                census[item.Key] = (item.Value.Item1, newDate);
+                                Console.WriteLine("Datum rođenja je promijenjen u " + newDate + ".");
+                            }
+                    }
+                    else Console.WriteLine("Ne postoji osoba s tim OIB-om.");
+
+                    break;
+            }
+        }
+
+        static void Statistics(Dictionary<string, (string, DateTime)> census)
+        {
+            int exit = 0;
+
+            while(0 == exit)
+            {
+                Console.WriteLine("1 - Postotak nezaposlenih (od 0 do 23 godine i od 65 do 100 godine) i postotak zaposlenih(od 23 do 65 godine)");
+                Console.WriteLine("2 - Ispis najčešćeg imena i koliko ga stanovnika ima");
+                Console.WriteLine("3 - Ispis najčešćeg prezimena i koliko ga stanovnika ima");
+                Console.WriteLine("4 - Ispis datum na koji je rođen najveći broj ljudi i koji je to datum");
+                Console.WriteLine("5 - Ispis broja ljudi rođenih u svakom od godišnjih doba (poredat godišnja doba s obzirom na broj ljudi rođenih u istim)");
+                Console.WriteLine("6 - Ispis najmlađeg stanovnika");
+                Console.WriteLine("7 - Ispis najstarijeg stanovnika");
+                Console.WriteLine("8 - Prosječan broj godina (na 2 decimale)");
+                Console.WriteLine("9 - Medijan godina");
+                Console.WriteLine("0 - Povratak na glavni izbornik");
+
+                var choice = int.Parse(Console.ReadLine());
+
+                switch (choice)
+                {
+                    case 1:
+                        Unemployment(census);
+                        break;
+                    case 5:
+                        Seasons(census);
+                        break;
+                    case 6:
+                        Youngest_Person(census);
+                        break;
+                    case 7:
+                        Oldest_Person(census);
+                        break;
+                    case 8:
+                        Average_Age(census);
+                        break;
+                    case 9:
+                        Median_Age(census);
+                        break;
+                    case 0:
+                        exit = 1;
+                        break;
+                }
             }
         }
     }
