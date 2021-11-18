@@ -15,9 +15,9 @@ namespace ConsoleApp
             census.Add("33333333333", ("Ivana Horvat", new DateTime(1940, 10, 10)));
             census.Add("44444444444", ("Stipan Prezime", new DateTime(2000, 10, 3)));
             census.Add("44444443445", ("Šime Šimić", new DateTime(2007, 1, 3)));
-            census.Add("44444444445", ("Ivan Ivanović", new DateTime(2007, 11, 4)));
-            census.Add("44444544445", ("Petra Horvat", new DateTime(2007, 11, 11)));
-            census.Add("44444644445", ("Jan Mlakar", new DateTime(2000, 8, 31)));
+            census.Add("44444444445", ("Ivan Ivanović", new DateTime(1990, 11, 4)));
+            census.Add("44444544445", ("Petra Horvat", new DateTime(1995, 11, 11)));
+            census.Add("44444644445", ("Jan Mlakar", new DateTime(1980, 8, 31)));
             census.Add("44444744445", ("Enver Hoxha", new DateTime(1950, 10, 3)));
             census.Add("44444844445", ("Ivan Horvat ", new DateTime(2007, 10, 3)));
 
@@ -175,34 +175,56 @@ namespace ConsoleApp
 
         static void Print_Population_Saved(Dictionary<string, (string, DateTime)> census)
         {
+            TimeSpan age;
+
             Console.WriteLine("Stanovništvo:");
             Console.WriteLine("OIB:\t\tIme i prezime:\t\tDatum rođenja:");
             foreach (var item in census)
             {
+                age = DateTime.Now - item.Value.Item2;
+                if (age.Days > (23 * 365.25) && age.Days < (65 * 365.25)) Console.ForegroundColor = ConsoleColor.Green;
+                else if (age.Days < (23 * 365.25) || age.Days > (65 * 365.25)) Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine(item.Key + "\t" + item.Value.Item1 + "\t\t" + item.Value.Item2.ToString("dd.MM.yyyy"));
+                Console.ResetColor();
             }
         }
 
         static void Print_Population_Ascending(Dictionary<string, (string, DateTime)> census)
         {
+            TimeSpan age;
+
             List<(string, string, DateTime)> sortedList = Transfer_to_List(census);
             sortedList.Sort((a, b) => a.Item3.CompareTo(b.Item3));
 
             Console.WriteLine("Stanovništvo:");
             Console.WriteLine("OIB:\t\tIme i prezime:\t\tDatum rođenja:");
             foreach (var item in sortedList)
+            {
+                age = DateTime.Now - item.Item3;
+                if (age.Days > (23 * 365.25) && age.Days < (65 * 365.25)) Console.ForegroundColor = ConsoleColor.Green;
+                else if (age.Days < (23 * 365.25) || age.Days > (65 * 365.25)) Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine(item.Item1 + "\t" + item.Item2 + "\t\t" + item.Item3.ToString("dd.MM.yyyy"));
+                Console.ResetColor();
+            }
         }
 
         static void Print_Population_Descending(Dictionary<string, (string, DateTime)> census)
         {
+            TimeSpan age;
+
             List<(string, string, DateTime)> sortedList = Transfer_to_List(census);
             sortedList.Sort((a, b) => b.Item3.CompareTo(a.Item3));
 
             Console.WriteLine("Stanovništvo:");
             Console.WriteLine("OIB:\t\tIme i prezime:\t\tDatum rođenja:");
             foreach (var item in sortedList)
+            {
+                age = DateTime.Now - item.Item3;
+                if (age.Days > (23 * 365.25) && age.Days < (65 * 365.25)) Console.ForegroundColor = ConsoleColor.Green;
+                else if (age.Days < (23 * 365.25) || age.Days > (65 * 365.25)) Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine(item.Item1 + "\t" + item.Item2 + "\t\t" + item.Item3.ToString("dd.MM.yyyy"));
+                Console.ResetColor();
+            }
         }
 
         static List<(string, string, DateTime)> Transfer_to_List(Dictionary<string, (string, DateTime)> census)
@@ -216,7 +238,7 @@ namespace ConsoleApp
         }
 
 
-static void Print_Person_OIB(Dictionary<string, (string, DateTime)> census)
+        static void Print_Person_OIB(Dictionary<string, (string, DateTime)> census)
         {
             Console.WriteLine("Unesi OIB:");
             string findOIB = OIB_Length_Check();
