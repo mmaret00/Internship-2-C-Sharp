@@ -10,16 +10,16 @@ namespace ConsoleApp
             var census = new Dictionary<string, (string nameAndSurname, DateTime dateOfBirth)>(){};
             int exit = 0, choice;
 
-            census.Add("11111111111", ("cetvrti ovo", new DateTime(1980, 11, 1)));
-            census.Add("22222222222", ("drugi drugic", new DateTime(2020, 7, 7)));
-            census.Add("33333333333", ("treci trecic", new DateTime(1940, 10, 10)));
-            census.Add("44444444444", ("cetvrti cetvrtic", new DateTime(2000, 10, 3)));
-            census.Add("44444443445", ("cetvrti zz", new DateTime(2007, 10, 3)));
-            census.Add("44444444445", ("cetvrti zz", new DateTime(2007, 10, 3)));
-            census.Add("44444544445", ("cetvrti zz", new DateTime(2007, 10, 3)));
-            census.Add("44444644445", ("drugi zz", new DateTime(2007, 10, 3)));
-            census.Add("44444744445", ("treci zz", new DateTime(2007, 10, 3)));
-            census.Add("44444844445", ("drugi zz", new DateTime(2007, 10, 3)));
+            census.Add("11111111111", ("Ante Antimon", new DateTime(1980, 11, 1)));
+            census.Add("22222222222", ("Ivan Horvat", new DateTime(2020, 7, 7)));
+            census.Add("33333333333", ("Ivana Horvat", new DateTime(1940, 10, 10)));
+            census.Add("44444444444", ("Stipan Prezime", new DateTime(2000, 10, 3)));
+            census.Add("44444443445", ("Šime Šimić", new DateTime(2007, 1, 3)));
+            census.Add("44444444445", ("Ivan Ivanović", new DateTime(2007, 11, 4)));
+            census.Add("44444544445", ("Petra Horvat", new DateTime(2007, 11, 11)));
+            census.Add("44444644445", ("Jan Mlakar", new DateTime(2000, 8, 31)));
+            census.Add("44444744445", ("Enver Hoxha", new DateTime(1950, 10, 3)));
+            census.Add("44444844445", ("Ivan Horvat ", new DateTime(2007, 10, 3)));
 
             while (1 != exit)
             {
@@ -137,179 +137,7 @@ namespace ConsoleApp
 
             } while (0 != repeat);
 
-            return dateOfBirth;
-        }
-
-        static void Unemployment(Dictionary<string, (string, DateTime)> census)
-        {
-            int unemployed = 0, employed = 0;
-
-            foreach (var item in census)
-            {
-                TimeSpan age = DateTime.Now - item.Value.Item2;
-                if (age.Days > (23 * 365.25) && age.Days < (65 * 365.25)) employed++;
-                else unemployed++;
-            }
-            double employedRatio = Math.Round((double)employed / census.Count, 4);
-            Console.WriteLine("Postotak zaposlenih je " + employedRatio * 100 + "%, a nezaposlenih " + (1 - employedRatio) * 100 + "%.");
-        }
-
-        static void Most_Common_Name(Dictionary<string, (string, DateTime)> census, int choice)
-        {
-            var namesDictionary = new Dictionary<string, int>() { };
-            string name = "";
-            int count;
-
-            foreach (var item in census)
-            {
-                if (0 == choice) name = item.Value.Item1.Substring(0, item.Value.Item1.IndexOf(" "));
-                if (1 == choice) name = item.Value.Item1.Substring(item.Value.Item1.IndexOf(" ") + 1);
-
-                if (namesDictionary.ContainsKey(name))
-                {
-                    if (namesDictionary.TryGetValue(name, out count))
-                        namesDictionary[name] = count + 1;
-                }
-                else
-                    namesDictionary.Add(name, 1);
-            }
-
-            List<(string, int)> SortedNames = new List<(string, int)>();
-
-            foreach (var item in namesDictionary)
-                SortedNames.Add((item.Key, item.Value));
-
-            SortedNames.Sort((a, b) => b.Item2.CompareTo(a.Item2));
-
-            if(0 == choice) Console.WriteLine("Najčešće ime je " + SortedNames[0].Item1 + ", pojavljuje se " + SortedNames[0].Item2 + " puta.");
-            if(1 == choice) Console.WriteLine("Najčešće prezime je " + SortedNames[0].Item1 + ", pojavljuje se " + SortedNames[0].Item2 + " puta.");
-        }
-
-        static void Most_Common_Date(Dictionary<string, (string, DateTime)> census)
-        {
-            var datesDictionary = new Dictionary<DateTime, int>() { };
-            DateTime birthDate;
-            int count;
-
-            foreach (var item in census)
-            {
-                birthDate = item.Value.Item2.Date;
-
-                if (datesDictionary.ContainsKey(birthDate))
-                {
-                    if (datesDictionary.TryGetValue(birthDate, out count))
-                        datesDictionary[birthDate] = count + 1;
-                }
-                else
-                    datesDictionary.Add(birthDate, 1);
-            }
-
-            List<(DateTime, int)> SortedDates = new List<(DateTime, int)>();
-
-            foreach (var item in datesDictionary)
-                SortedDates.Add((item.Key, item.Value));
-
-            SortedDates.Sort((a, b) => b.Item2.CompareTo(a.Item2));
-
-            Console.WriteLine("Najčešći datum rođenja je " + SortedDates[0].Item1 + ", na njega je rođeno " + SortedDates[0].Item2 + " ljudi.");
-        }
-
-
-
-
-            static void Seasons(Dictionary<string, (string, DateTime)> census)
-        {
-            int winter = 0, spring = 0, summer = 0, autumn = 0;
-
-            foreach (var item in census)
-            {
-                var birthDate = (float)item.Value.Item2.Month + item.Value.Item2.Day / 100f;
-                if (birthDate >= 12.21 || birthDate < 3.21) winter++;
-                else if (birthDate >= 3.21 && birthDate < 6.21) spring++;
-                else if (birthDate >= 6.21 && birthDate < 9.23) summer++;
-                else if (birthDate >= 9.23 && birthDate < 12.21) autumn++;
-            }
-
-            List<(string, int)> SeasonsList = new List<(string, int)>();
-
-            SeasonsList.Add(("Zima", winter));
-            SeasonsList.Add(("Proljeće", spring));
-            SeasonsList.Add(("Ljeto", summer));
-            SeasonsList.Add(("Jesen", autumn));
-
-            SeasonsList.Sort((a, b) => b.Item2.CompareTo(a.Item2));
-
-            foreach (var item in SeasonsList)
-            {
-                Console.WriteLine(item.Item1 + ": " + item.Item2 + " ljudi.");
-            }
-        }
-
-        static void Youngest_Person(Dictionary<string, (string, DateTime)> census)
-        {//mozda dodat OIB ovdi i kod najstarijih
-            var minDays = 200 * 365; // vidit kako bolje
-            var YoungestSoFar = ("", DateTime.Now);
-
-            foreach (var item in census)
-            {
-                TimeSpan age = DateTime.Now - item.Value.Item2;
-                if (age.Days < minDays)
-                {
-                    minDays = age.Days;
-                    YoungestSoFar = (item.Value.Item1, item.Value.Item2);
-                }
-            }
-
-            Console.WriteLine("\nNajmlađi stanovnik je " + YoungestSoFar.Item1 + ", rođen " + YoungestSoFar.Now + ".\n");
-        }
-
-        static void Oldest_Person(Dictionary<string, (string, DateTime)> census)
-        {
-            var maxDays = 0; // vidit kako bolje
-            var OldestSoFar = ("", DateTime.Now);
-
-            foreach (var item in census)
-            {
-                TimeSpan age = DateTime.Now - item.Value.Item2;
-                if (age.Days > maxDays)
-                {
-                    maxDays = age.Days;
-                    OldestSoFar = (item.Value.Item1, item.Value.Item2);
-                }
-            }
-
-            Console.WriteLine("\nNajstariji stanovnik je " + OldestSoFar.Item1 + ", rođen " + OldestSoFar.Now + ".\n");
-        }
-
-        static void Average_Age(Dictionary<string, (string, DateTime)> census)
-        {
-            int daysOldTotal = 0;
-            TimeSpan age;
-
-            foreach (var item in census)
-            {
-                age = DateTime.Now - item.Value.Item2;
-                daysOldTotal += age.Days;
-            }
-
-            var yearsAvg = Math.Round((double)(daysOldTotal / census.Count) / 365.25, 2);
-            Console.WriteLine("Prosjek godina stanovništva je " + 100 * yearsAvg / 100 + " godina.");
-        }
-
-        static void Median_Age(Dictionary<string, (string, DateTime)> census)
-        {
-            List<(string, string, DateTime)> sortedList = Transfer_to_List(census);
-            sortedList.Sort((a, b) => a.Item3.CompareTo(b.Item3));
-            TimeSpan age = DateTime.Now - sortedList[sortedList.Count / 2].Item3;
-            TimeSpan age2 = DateTime.Now - sortedList[(sortedList.Count / 2) - 1].Item3;
-            double medianAge;
-
-            if (0 != sortedList.Count % 2)
-                medianAge = Math.Round(age.Days / 365.25, 2);
-            else
-                medianAge = Math.Round((age.Days + age2.Days) / 2 / 365.25, 2);
-
-            Console.WriteLine("Medijan godina stanovništva je " + medianAge + ".");
+            return dateOfBirth.Date;
         }
 
         static void Print_Population(Dictionary<string, (string, DateTime)> census)
@@ -348,33 +176,33 @@ namespace ConsoleApp
         static void Print_Population_Saved(Dictionary<string, (string, DateTime)> census)
         {
             Console.WriteLine("Stanovništvo:");
-            Console.WriteLine("OIB:\tIme i prezime:\tDatum rođenja:");
+            Console.WriteLine("OIB:\t\tIme i prezime:\t\tDatum rođenja:");
             foreach (var item in census)
             {
-                Console.WriteLine(item.Key + "\t" + item.Value.Item1 + "\t" + item.Value.Item2);
+                Console.WriteLine(item.Key + "\t" + item.Value.Item1 + "\t\t" + item.Value.Item2.ToString("dd.MM.yyyy"));
             }
         }
 
         static void Print_Population_Ascending(Dictionary<string, (string, DateTime)> census)
         {
             List<(string, string, DateTime)> sortedList = Transfer_to_List(census);
-            sortedList.Sort((a,b) => a.Item3.CompareTo(b.Item3));
+            sortedList.Sort((a, b) => a.Item3.CompareTo(b.Item3));
 
             Console.WriteLine("Stanovništvo:");
-            Console.WriteLine("OIB:\tIme i prezime:\tDatum rođenja:");
+            Console.WriteLine("OIB:\t\tIme i prezime:\t\tDatum rođenja:");
             foreach (var item in sortedList)
-                Console.WriteLine(item.Item1 + "\t" + item.Item2 + "\t" + item.Item3);
+                Console.WriteLine(item.Item1 + "\t" + item.Item2 + "\t\t" + item.Item3.ToString("dd.MM.yyyy"));
         }
 
         static void Print_Population_Descending(Dictionary<string, (string, DateTime)> census)
         {
             List<(string, string, DateTime)> sortedList = Transfer_to_List(census);
-            sortedList.Sort((a,b) => b.Item3.CompareTo(a.Item3));
+            sortedList.Sort((a, b) => b.Item3.CompareTo(a.Item3));
 
             Console.WriteLine("Stanovništvo:");
-            Console.WriteLine("OIB:\tIme i prezime:\tDatum rođenja:");
+            Console.WriteLine("OIB:\t\tIme i prezime:\t\tDatum rođenja:");
             foreach (var item in sortedList)
-                Console.WriteLine(item.Item1 + "\t" + item.Item2 + "\t" + item.Item3);
+                Console.WriteLine(item.Item1 + "\t" + item.Item2 + "\t\t" + item.Item3.ToString("dd.MM.yyyy"));
         }
 
         static List<(string, string, DateTime)> Transfer_to_List(Dictionary<string, (string, DateTime)> census)
@@ -387,10 +215,12 @@ namespace ConsoleApp
             return NewList;
         }
 
-        static void Print_Person_OIB(Dictionary<string, (string, DateTime)> census)
+
+static void Print_Person_OIB(Dictionary<string, (string, DateTime)> census)
         {
             Console.WriteLine("Unesi OIB:");
             string findOIB = OIB_Length_Check();
+            int foundIt = 0;
 
             foreach (var item in census)
             {
@@ -398,15 +228,17 @@ namespace ConsoleApp
                 {
                     Console.WriteLine("Osoba s OIB-om " + findOIB + ":");
                     Console.WriteLine("Ime i prezime:\tDatum rođenja:");
-                    Console.WriteLine(item.Value.Item1 + "\t" + item.Value.Item2);
+                    Console.WriteLine(item.Value.Item1 + "\t" + item.Value.Item2.ToString("dd.MM.yyyy"));
+                    foundIt++;
                 }
-                else
-                    Console.WriteLine("Ne postoji osoba s tim OIB-om.");
             }
+            if(0 == foundIt)
+                Console.WriteLine("Ne postoji osoba s tim OIB-om.");
         }
 
         static void Print_Person_Name_Date(Dictionary<string, (string, DateTime)> census)
         {
+            int foundIt = 0;
             Console.WriteLine("Unesi ime i prezime: ");
             string findName = Name_Space_Check();
 
@@ -417,12 +249,13 @@ namespace ConsoleApp
             {
                 if (findName == item.Value.Item1 && findDate == item.Value.Item2)
                 {
-                    Console.WriteLine("OIB osobe " + findName + " rođene " + findDate + ":");
+                    Console.WriteLine("OIB osobe " + findName + " rođene " + findDate.ToString("dd.MM.yyyy") + ":");
                     Console.WriteLine(item.Key);
+                    foundIt++;
                 }
-                else if (findName != item.Value.Item1 || findDate != item.Value.Item2)
-                    Console.WriteLine("Ne postoji osoba s tim imenom rođena na taj datum.");
             }
+           if (0 == foundIt)
+                Console.WriteLine("Ne postoji osoba s tim imenom rođena na taj datum.");
         }
 
         static void New_Entry(Dictionary<string, (string, DateTime)> census)
@@ -469,7 +302,7 @@ namespace ConsoleApp
                 if (deleteOIB == item.Key)
                 {
                     census.Remove(deleteOIB);
-                    Console.WriteLine("Osoba " + item.Value.Item1 + " rođena " + item.Value.Item2 + " je obrisana.");
+                    Console.WriteLine("Osoba " + item.Value.Item1 + " rođena " + item.Value.Item2.ToString("dd.MM.yyyy") + " je obrisana.");
                 }
             }
         }
@@ -480,7 +313,7 @@ namespace ConsoleApp
             string deleteName = Name_Space_Check();
             string OIBToDelete = "";
 
-            Console.WriteLine("Unesi datum rođenja (dan, mjesec, godina, sat:minuta:sekunda):");
+            Console.WriteLine("Unesi datum rođenja (dan, mjesec, godina):");
             DateTime deleteDate = Date_Check();
 
             int sameNameAndDate = 0;
@@ -500,7 +333,7 @@ namespace ConsoleApp
             else if (1 == sameNameAndDate)
             {
                 census.Remove(OIBToDelete);
-                Console.WriteLine("Osoba " + deleteName + " rođena " + deleteDate + " je obrisana.");
+                Console.WriteLine("Osoba " + deleteName + " rođena " + deleteDate.ToString("dd.MM.yyyy") + " je obrisana.");
             }
 
             else if (sameNameAndDate > 1)
@@ -513,7 +346,7 @@ namespace ConsoleApp
                 Console.WriteLine("Upiši OIB osobe koju želiš obrisati:");
                 OIBToDelete = (Console.ReadLine());
                 census.Remove(OIBToDelete);
-                Console.WriteLine("Osoba " + deleteName + " rođena " + deleteDate + " s OIB-om " + OIBToDelete + " je obrisana.");
+                Console.WriteLine("Osoba " + deleteName + " rođena " + deleteDate.ToString("dd.MM.yyyy") + " s OIB-om " + OIBToDelete + " je obrisana.");
             }
         }
 
@@ -558,7 +391,7 @@ namespace ConsoleApp
                 foreach (var item in census)
                     if (changeOIB == item.Key)
                     {
-                        Console.WriteLine("Mijenja se OIB osobe " + item.Value.Item1 + " rođene " + item.Value.Item2 + ".");
+                        Console.WriteLine("Mijenja se OIB osobe " + item.Value.Item1 + " rođene " + item.Value.Item2.ToString("dd.MM.yyyy") + ".");
                         Console.WriteLine("Unesi novi OIB:");
                         newOIB = OIB_Length_Check();
                         tempName = item.Value.Item1;
@@ -586,7 +419,7 @@ namespace ConsoleApp
                 foreach (var item in census)
                     if (changeOIB == item.Key)
                     {
-                        Console.WriteLine("Mijenja se ime i prezime osobe " + item.Value.Item1 + " rođene " + item.Value.Item2 + ".");
+                        Console.WriteLine("Mijenja se ime i prezime osobe " + item.Value.Item1 + " rođene " + item.Value.Item2.ToString("dd.MM.yyyy") + ".");
                         Console.WriteLine("Unesi novo ime:");
                         string newName = Name_Space_Check();
                         census[item.Key] = (newName, item.Value.Item2);
@@ -606,7 +439,7 @@ namespace ConsoleApp
                 foreach (var item in census)
                     if (changeOIB == item.Key)
                     {
-                        Console.WriteLine("Mijenja se datum rođenja osobe " + item.Value.Item1 + " rođene " + item.Value.Item2 + ".");
+                        Console.WriteLine("Mijenja se datum rođenja osobe " + item.Value.Item1 + " rođene " + item.Value.Item2.ToString("dd.MM.yyyy") + ".");
                         Console.WriteLine("Unesi novi datum rođenja:");
                         DateTime newDate = Date_Check();
                         census[item.Key] = (item.Value.Item1, newDate);
@@ -671,6 +504,178 @@ namespace ConsoleApp
                         break;
                 }
             }
+        }
+
+        static void Unemployment(Dictionary<string, (string, DateTime)> census)
+        {
+            int unemployed = 0, employed = 0;
+
+            foreach (var item in census)
+            {
+                TimeSpan age = DateTime.Now - item.Value.Item2;
+                if (age.Days > (23 * 365.25) && age.Days < (65 * 365.25)) employed++;
+                else unemployed++;
+            }
+            double employedRatio = Math.Round((double)employed / census.Count, 4);
+            Console.WriteLine("Postotak zaposlenih je " + employedRatio * 100 + "%, a nezaposlenih " + (1 - employedRatio) * 100 + "%.");
+        }
+
+        static void Most_Common_Name(Dictionary<string, (string, DateTime)> census, int choice)
+        {
+            var namesDictionary = new Dictionary<string, int>() { };
+            string name = "";
+            int count;
+
+            foreach (var item in census)
+            {
+                if (0 == choice) name = item.Value.Item1.Substring(0, item.Value.Item1.IndexOf(" "));
+                if (1 == choice) name = item.Value.Item1.Substring(item.Value.Item1.IndexOf(" ") + 1);
+
+                if (namesDictionary.ContainsKey(name))
+                {
+                    if (namesDictionary.TryGetValue(name, out count))
+                        namesDictionary[name] = count + 1;
+                }
+                else
+                    namesDictionary.Add(name, 1);
+            }
+
+            List<(string, int)> SortedNames = new List<(string, int)>();
+
+            foreach (var item in namesDictionary)
+                SortedNames.Add((item.Key, item.Value));
+
+            SortedNames.Sort((a, b) => b.Item2.CompareTo(a.Item2));
+
+            if (0 == choice) Console.WriteLine("Najčešće ime je " + SortedNames[0].Item1 + ", pojavljuje se " + SortedNames[0].Item2 + " puta.");
+            if (1 == choice) Console.WriteLine("Najčešće prezime je " + SortedNames[0].Item1 + ", pojavljuje se " + SortedNames[0].Item2 + " puta.");
+        }
+
+        static void Most_Common_Date(Dictionary<string, (string, DateTime)> census)
+        {
+            var datesDictionary = new Dictionary<DateTime, int>() { };
+            DateTime birthDate;
+            int count;
+
+            foreach (var item in census)
+            {
+                birthDate = item.Value.Item2.Date;
+
+                if (datesDictionary.ContainsKey(birthDate))
+                {
+                    if (datesDictionary.TryGetValue(birthDate, out count))
+                        datesDictionary[birthDate] = count + 1;
+                }
+                else
+                    datesDictionary.Add(birthDate, 1);
+            }
+
+            List<(DateTime, int)> SortedDates = new List<(DateTime, int)>();
+
+            foreach (var item in datesDictionary)
+                SortedDates.Add((item.Key, item.Value));
+
+            SortedDates.Sort((a, b) => b.Item2.CompareTo(a.Item2));
+
+            Console.WriteLine("Najčešći datum rođenja je " + SortedDates[0].Item1.ToString("dd.MM.yyyy") + ", na njega je rođeno " + SortedDates[0].Item2 + " ljudi.");
+        }
+
+
+
+
+        static void Seasons(Dictionary<string, (string, DateTime)> census)
+        {
+            int winter = 0, spring = 0, summer = 0, autumn = 0;
+
+            foreach (var item in census)
+            {
+                var birthDate = (float)item.Value.Item2.Month + item.Value.Item2.Day / 100f;
+                if (birthDate >= 12.21 || birthDate < 3.21) winter++;
+                else if (birthDate >= 3.21 && birthDate < 6.21) spring++;
+                else if (birthDate >= 6.21 && birthDate < 9.23) summer++;
+                else if (birthDate >= 9.23 && birthDate < 12.21) autumn++;
+            }
+
+            List<(string, int)> SeasonsList = new List<(string, int)>();
+
+            SeasonsList.Add(("Zima", winter));
+            SeasonsList.Add(("Proljeće", spring));
+            SeasonsList.Add(("Ljeto", summer));
+            SeasonsList.Add(("Jesen", autumn));
+
+            SeasonsList.Sort((a, b) => b.Item2.CompareTo(a.Item2));
+
+            foreach (var item in SeasonsList)
+            {
+                Console.WriteLine(item.Item1 + ": " + item.Item2 + " ljudi.");
+            }
+        }
+
+        static void Youngest_Person(Dictionary<string, (string, DateTime)> census)
+        {
+            var minDays = 200 * 365.25;
+            var YoungestSoFar = ("", "", DateTime.Now);
+
+            foreach (var item in census)
+            {
+                TimeSpan age = DateTime.Now - item.Value.Item2;
+                if (age.Days < minDays)
+                {
+                    minDays = age.Days;
+                    YoungestSoFar = (item.Key, item.Value.Item1, item.Value.Item2);
+                }
+            }
+
+            Console.WriteLine("\nNajmlađi stanovnik je " + YoungestSoFar.Item2 + " (" + YoungestSoFar.Item1 + ")" + ", rođen " + YoungestSoFar.Now.ToString("dd.MM.yyyy") + ".\n");
+        }
+
+        static void Oldest_Person(Dictionary<string, (string, DateTime)> census)
+        {
+            var maxDays = 0;
+            var OldestSoFar = ("", "", DateTime.Now);
+
+            foreach (var item in census)
+            {
+                TimeSpan age = DateTime.Now - item.Value.Item2;
+                if (age.Days > maxDays)
+                {
+                    maxDays = age.Days;
+                    OldestSoFar = (item.Key, item.Value.Item1, item.Value.Item2);
+                }
+            }
+
+            Console.WriteLine("\nNajstariji stanovnik je " + OldestSoFar.Item2 + " (" + OldestSoFar.Item1 + ")" + ", rođen " + OldestSoFar.Now.ToString("dd.MM.yyyy") + ".\n");
+        }
+
+        static void Average_Age(Dictionary<string, (string, DateTime)> census)
+        {
+            int daysOldTotal = 0;
+            TimeSpan age;
+
+            foreach (var item in census)
+            {
+                age = DateTime.Now - item.Value.Item2;
+                daysOldTotal += age.Days;
+            }
+
+            var yearsAvg = Math.Round((double)(daysOldTotal / census.Count) / 365.25, 2);
+            Console.WriteLine("Prosjek godina stanovništva je " + 100 * yearsAvg / 100 + " godina.");
+        }
+
+        static void Median_Age(Dictionary<string, (string, DateTime)> census)
+        {
+            List<(string, string, DateTime)> sortedList = Transfer_to_List(census);
+            sortedList.Sort((a, b) => a.Item3.CompareTo(b.Item3));
+            TimeSpan age = DateTime.Now - sortedList[sortedList.Count / 2].Item3;
+            TimeSpan age2 = DateTime.Now - sortedList[(sortedList.Count / 2) - 1].Item3;
+            double medianAge;
+
+            if (0 != sortedList.Count % 2)
+                medianAge = Math.Round(age.Days / 365.25, 2);
+            else
+                medianAge = Math.Round((age.Days + age2.Days) / 2 / 365.25, 2);
+
+            Console.WriteLine("Medijan godina stanovništva je " + medianAge + ".");
         }
     }
 }
