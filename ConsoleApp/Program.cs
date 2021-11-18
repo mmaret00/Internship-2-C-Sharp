@@ -10,6 +10,17 @@ namespace ConsoleApp
             var census = new Dictionary<string, (string nameAndSurname, DateTime dateOfBirth)>(){};
             int exit = 0, choice;
 
+            census.Add("11111111111", ("cetvrti ovo", new DateTime(1980, 11, 1)));
+            census.Add("22222222222", ("drugi drugic", new DateTime(2020, 7, 7)));
+            census.Add("33333333333", ("treci trecic", new DateTime(1940, 10, 10)));
+            census.Add("44444444444", ("cetvrti cetvrtic", new DateTime(2000, 10, 3)));
+            census.Add("44444443445", ("cetvrti zz", new DateTime(2007, 10, 3)));
+            census.Add("44444444445", ("cetvrti zz", new DateTime(2007, 10, 3)));
+            census.Add("44444544445", ("cetvrti zz", new DateTime(2007, 10, 3)));
+            census.Add("44444644445", ("drugi zz", new DateTime(2007, 10, 3)));
+            census.Add("44444744445", ("treci zz", new DateTime(2007, 10, 3)));
+            census.Add("44444844445", ("drugi zz", new DateTime(2007, 10, 3)));
+
             while (1 != exit)
             {
 
@@ -143,7 +154,70 @@ namespace ConsoleApp
             Console.WriteLine("Postotak zaposlenih je " + employedRatio * 100 + "%, a nezaposlenih " + (1 - employedRatio) * 100 + "%.");
         }
 
-        static void Seasons(Dictionary<string, (string, DateTime)> census)
+        static void Most_Common_Name(Dictionary<string, (string, DateTime)> census, int choice)
+        {
+            var namesDictionary = new Dictionary<string, int>() { };
+            string name = "";
+            int count;
+
+            foreach (var item in census)
+            {
+                if (0 == choice) name = item.Value.Item1.Substring(0, item.Value.Item1.IndexOf(" "));
+                if (1 == choice) name = item.Value.Item1.Substring(item.Value.Item1.IndexOf(" ") + 1);
+
+                if (namesDictionary.ContainsKey(name))
+                {
+                    if (namesDictionary.TryGetValue(name, out count))
+                        namesDictionary[name] = count + 1;
+                }
+                else
+                    namesDictionary.Add(name, 1);
+            }
+
+            List<(string, int)> SortedNames = new List<(string, int)>();
+
+            foreach (var item in namesDictionary)
+                SortedNames.Add((item.Key, item.Value));
+
+            SortedNames.Sort((a, b) => b.Item2.CompareTo(a.Item2));
+
+            if(0 == choice) Console.WriteLine("Najčešće ime je " + SortedNames[0].Item1 + ", pojavljuje se " + SortedNames[0].Item2 + " puta.");
+            if(1 == choice) Console.WriteLine("Najčešće prezime je " + SortedNames[0].Item1 + ", pojavljuje se " + SortedNames[0].Item2 + " puta.");
+        }
+
+        static void Most_Common_Date(Dictionary<string, (string, DateTime)> census)
+        {
+            var datesDictionary = new Dictionary<DateTime, int>() { };
+            DateTime birthDate;
+            int count;
+
+            foreach (var item in census)
+            {
+                birthDate = item.Value.Item2.Date;
+
+                if (datesDictionary.ContainsKey(birthDate))
+                {
+                    if (datesDictionary.TryGetValue(birthDate, out count))
+                        datesDictionary[birthDate] = count + 1;
+                }
+                else
+                    datesDictionary.Add(birthDate, 1);
+            }
+
+            List<(DateTime, int)> SortedDates = new List<(DateTime, int)>();
+
+            foreach (var item in datesDictionary)
+                SortedDates.Add((item.Key, item.Value));
+
+            SortedDates.Sort((a, b) => b.Item2.CompareTo(a.Item2));
+
+            Console.WriteLine("Najčešći datum rođenja je " + SortedDates[0].Item1 + ", na njega je rođeno " + SortedDates[0].Item2 + " ljudi.");
+        }
+
+
+
+
+            static void Seasons(Dictionary<string, (string, DateTime)> census)
         {
             int winter = 0, spring = 0, summer = 0, autumn = 0;
 
@@ -565,6 +639,15 @@ namespace ConsoleApp
                 {
                     case 1:
                         Unemployment(census);
+                        break;
+                    case 2:
+                        Most_Common_Name(census, 0);
+                        break;
+                    case 3:
+                        Most_Common_Name(census, 1);
+                        break;
+                    case 4:
+                        Most_Common_Date(census);
                         break;
                     case 5:
                         Seasons(census);
