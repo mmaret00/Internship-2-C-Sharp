@@ -147,15 +147,27 @@ namespace ConsoleApp
         {
             int winter = 0, spring = 0, summer = 0, autumn = 0;
 
-            //nista ne valja, popravit
             foreach (var item in census)
             {
                 var birthDate = (float)item.Value.Item2.Month + item.Value.Item2.Day / 100f;
                 if (birthDate >= 12.21 || birthDate < 3.21) winter++;
-                else if (birthDate >= 3.21 || birthDate < 6.21) spring++;
-                else if (birthDate >= 6.21 || birthDate < 9.23) summer++;
-                else if (birthDate >= 9.23 || birthDate < 12.21) autumn++;
+                else if (birthDate >= 3.21 && birthDate < 6.21) spring++;
+                else if (birthDate >= 6.21 && birthDate < 9.23) summer++;
+                else if (birthDate >= 9.23 && birthDate < 12.21) autumn++;
+            }
 
+            List<(string, int)> SeasonsList = new List<(string, int)>();
+
+            SeasonsList.Add(("Zima", winter));
+            SeasonsList.Add(("Proljeće", spring));
+            SeasonsList.Add(("Ljeto", summer));
+            SeasonsList.Add(("Jesen", autumn));
+
+            SeasonsList.Sort((a, b) => b.Item2.CompareTo(a.Item2));
+
+            foreach (var item in SeasonsList)
+            {
+                Console.WriteLine(item.Item1 + ": " + item.Item2 + " ljudi.");
             }
         }
 
