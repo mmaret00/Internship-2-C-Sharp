@@ -11,7 +11,7 @@ namespace ConsoleApp
             int exit = 0, choice;
 
             census.Add("11111111111", ("Ante Antimon", new DateTime(1980, 11, 1)));
-            census.Add("22222222222", ("Ivan Horvat", new DateTime(2020, 7, 7)));
+            census.Add("22222222222", ("Ivan Horvat", new DateTime(2007, 10, 3)));
             census.Add("33333333333", ("Ivana Horvat", new DateTime(1940, 10, 10)));
             census.Add("44444444444", ("Stipan Prezime", new DateTime(2000, 10, 3)));
             census.Add("44444443445", ("Šime Šimić", new DateTime(2007, 1, 3)));
@@ -19,7 +19,7 @@ namespace ConsoleApp
             census.Add("44444544445", ("Petra Horvat", new DateTime(1995, 11, 11)));
             census.Add("44444644445", ("Jan Mlakar", new DateTime(1980, 8, 31)));
             census.Add("44444744445", ("Enver Hoxha", new DateTime(1950, 10, 3)));
-            census.Add("44444844445", ("Ivan Horvat ", new DateTime(2007, 10, 3)));
+            census.Add("44444844445", ("Ivan Horvat", new DateTime(2007, 10, 3)));
 
             while (1 != exit)
             {
@@ -184,7 +184,8 @@ namespace ConsoleApp
                 age = DateTime.Now - item.Value.Item2;
                 if (age.Days > (23 * 365.25) && age.Days < (65 * 365.25)) Console.ForegroundColor = ConsoleColor.Green;
                 else if (age.Days < (23 * 365.25) || age.Days > (65 * 365.25)) Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(item.Key + "\t" + item.Value.Item1 + "\t\t" + item.Value.Item2.ToString("dd.MM.yyyy"));
+
+                Console.WriteLine(item.Key + "\t" + item.Value.Item1 + "\t\t" + item.Value.Item2.ToString("dd.MM.yyyy."));
                 Console.ResetColor();
             }
         }
@@ -203,7 +204,8 @@ namespace ConsoleApp
                 age = DateTime.Now - item.Item3;
                 if (age.Days > (23 * 365.25) && age.Days < (65 * 365.25)) Console.ForegroundColor = ConsoleColor.Green;
                 else if (age.Days < (23 * 365.25) || age.Days > (65 * 365.25)) Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(item.Item1 + "\t" + item.Item2 + "\t\t" + item.Item3.ToString("dd.MM.yyyy"));
+
+                Console.WriteLine(item.Item1 + "\t" + item.Item2 + "\t\t" + item.Item3.ToString("dd.MM.yyyy."));
                 Console.ResetColor();
             }
         }
@@ -222,7 +224,8 @@ namespace ConsoleApp
                 age = DateTime.Now - item.Item3;
                 if (age.Days > (23 * 365.25) && age.Days < (65 * 365.25)) Console.ForegroundColor = ConsoleColor.Green;
                 else if (age.Days < (23 * 365.25) || age.Days > (65 * 365.25)) Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(item.Item1 + "\t" + item.Item2 + "\t\t" + item.Item3.ToString("dd.MM.yyyy"));
+
+                Console.WriteLine(item.Item1 + "\t" + item.Item2 + "\t\t" + item.Item3.ToString("dd.MM.yyyy."));
                 Console.ResetColor();
             }
         }
@@ -237,7 +240,6 @@ namespace ConsoleApp
             return NewList;
         }
 
-
         static void Print_Person_OIB(Dictionary<string, (string, DateTime)> census)
         {
             Console.WriteLine("Unesi OIB:");
@@ -250,7 +252,7 @@ namespace ConsoleApp
                 {
                     Console.WriteLine("Osoba s OIB-om " + findOIB + ":");
                     Console.WriteLine("Ime i prezime:\tDatum rođenja:");
-                    Console.WriteLine(item.Value.Item1 + "\t" + item.Value.Item2.ToString("dd.MM.yyyy"));
+                    Console.WriteLine(item.Value.Item1 + "\t" + item.Value.Item2.ToString("dd.MM.yyyy."));
                     foundIt++;
                 }
             }
@@ -264,14 +266,14 @@ namespace ConsoleApp
             Console.WriteLine("Unesi ime i prezime: ");
             string findName = Name_Space_Check();
 
-            Console.WriteLine("Unesi datum rođenja (dan, mjesec, godina, sat:minuta:sekunda):");
+            Console.WriteLine("Unesi datum rođenja (dan, mjesec, godina):");
             DateTime findDate = Date_Check();
 
             foreach (var item in census)
             {
                 if (findName == item.Value.Item1 && findDate == item.Value.Item2)
                 {
-                    Console.WriteLine("OIB osobe " + findName + " rođene " + findDate.ToString("dd.MM.yyyy") + ":");
+                    Console.WriteLine("OIB osobe " + findName + " rođene " + findDate.ToString("dd.MM.yyyy.") + ":");
                     Console.WriteLine(item.Key);
                     foundIt++;
                 }
@@ -301,7 +303,7 @@ namespace ConsoleApp
             Console.WriteLine("Unesi ime i prezime:");
             var nameAndSurname = Name_Space_Check();
 
-            Console.WriteLine("Unesi datum rođenja (dan, mjesec, godina, sat:minuta:sekunda):");
+            Console.WriteLine("Unesi datum rođenja (dan, mjesec, godina):");
             DateTime dateOfBirth = Date_Check();
 
             census.Add(newOIB, (nameAndSurname, dateOfBirth));
@@ -311,7 +313,8 @@ namespace ConsoleApp
         {
             Console.WriteLine("Unesi OIB:");
             string deleteOIB = OIB_Length_Check();
-            int repeat = 1;
+            int repeat = 1, correct = 0;
+            string confirmation;
 
             if (census.ContainsKey(deleteOIB))
                 repeat = 0;
@@ -323,8 +326,25 @@ namespace ConsoleApp
             {
                 if (deleteOIB == item.Key)
                 {
-                    census.Remove(deleteOIB);
-                    Console.WriteLine("Osoba " + item.Value.Item1 + " rođena " + item.Value.Item2.ToString("dd.MM.yyyy") + " je obrisana.");
+                    while (0 == correct)
+                    {
+                        Console.WriteLine("Jeste li sigurni da želite obrisati stanovnika " + item.Value.Item1 + " rođenog " + item.Value.Item2.ToString("dd.MM.yyyy.") + "?");
+                        Console.WriteLine("(da/ne)");
+                        confirmation = Console.ReadLine();
+                        if ("da" == confirmation)
+                        {
+                            correct = 1;
+                            census.Remove(deleteOIB);
+                            Console.WriteLine("Osoba " + item.Value.Item1 + " rođena " + item.Value.Item2.ToString("dd.MM.yyyy.") + " je obrisana.");
+                        }
+                        else if ("ne" == confirmation)
+                        {
+                            correct = 1;
+                            Console.WriteLine("Povratak na glavni izbornik.");
+                        }
+                        else
+                            Console.WriteLine("Nepravilan unos, molimo ponovite (unesite 'da' ili 'ne'):");
+                    }
                 }
             }
         }
@@ -334,6 +354,8 @@ namespace ConsoleApp
             Console.WriteLine("Unesi ime i prezime: ");
             string deleteName = Name_Space_Check();
             string OIBToDelete = "";
+            string confirmation;
+            int correct = 0;
 
             Console.WriteLine("Unesi datum rođenja (dan, mjesec, godina):");
             DateTime deleteDate = Date_Check();
@@ -352,10 +374,29 @@ namespace ConsoleApp
             if (0 == sameNameAndDate)
                 Console.WriteLine("Ne postoji osoba s tim imenom rođena na taj datum.");
 
+
+
             else if (1 == sameNameAndDate)
             {
-                census.Remove(OIBToDelete);
-                Console.WriteLine("Osoba " + deleteName + " rođena " + deleteDate.ToString("dd.MM.yyyy") + " je obrisana.");
+                while (0 == correct)
+                {
+                    Console.WriteLine("Jeste li sigurni da želite obrisati stanovnika " + deleteName + " rođenog " + deleteDate.ToString("dd.MM.yyyy.") + "?");
+                    Console.WriteLine("(da/ne)");
+                    confirmation = Console.ReadLine();
+                    if ("da" == confirmation)
+                    {
+                        correct = 1;
+                        census.Remove(OIBToDelete);
+                        Console.WriteLine("Osoba " + deleteName + " rođena " + deleteDate.ToString("dd.MM.yyyy.") + " je obrisana.");
+                    }
+                    else if ("ne" == confirmation)
+                    {
+                        correct = 1;
+                        Console.WriteLine("Povratak na glavni izbornik.");
+                    }
+                    else
+                        Console.WriteLine("Nepravilan unos, molimo ponovite (unesite 'da' ili 'ne'):");
+                }
             }
 
             else if (sameNameAndDate > 1)
@@ -367,8 +408,26 @@ namespace ConsoleApp
 
                 Console.WriteLine("Upiši OIB osobe koju želiš obrisati:");
                 OIBToDelete = (Console.ReadLine());
-                census.Remove(OIBToDelete);
-                Console.WriteLine("Osoba " + deleteName + " rođena " + deleteDate.ToString("dd.MM.yyyy") + " s OIB-om " + OIBToDelete + " je obrisana.");
+
+                while (0 == correct)
+                {
+                    Console.WriteLine("Jeste li sigurni da želite obrisati stanovnika " + deleteName + " rođenog " + deleteDate.ToString("dd.MM.yyyy.") + "?");
+                    Console.WriteLine("(da/ne)");
+                    confirmation = Console.ReadLine();
+                    if ("da" == confirmation)
+                    {
+                        correct = 1;
+                        census.Remove(OIBToDelete);
+                        Console.WriteLine("Osoba " + deleteName + " rođena " + deleteDate.ToString("dd.MM.yyyy.") + " je obrisana.");
+                    }
+                    else if ("ne" == confirmation)
+                    {
+                        correct = 1;
+                        Console.WriteLine("Povratak na glavni izbornik.");
+                    }
+                    else
+                        Console.WriteLine("Nepravilan unos, molimo ponovite (unesite 'da' ili 'ne'):");
+                }
             }
         }
 
@@ -379,49 +438,65 @@ namespace ConsoleApp
             Console.WriteLine("1 - Uredi OIB stanovnika");
             Console.WriteLine("2 - Uredi ime i prezime stanovnika");
             Console.WriteLine("3 - Uredi datum rođenja");
+            Console.WriteLine("0 - Povratak na glavni izbornik");
 
             int.TryParse(Console.ReadLine(), out subchoice);
 
-            switch (subchoice)
-            {
-                case 1:
-                    Change_Person_OIB(census);
-                    break;
-
-                case 2:
-                    Change_Person_Name(census);
-                    break;
-
-                case 3:
-                    Change_Person_Date(census);
-                    break;
-                default:
-                    break;
-            }
+                switch (subchoice)
+                {
+                    case 1:
+                        Change_Person_OIB(census);
+                        break;
+                    case 2:
+                        Change_Person_Name(census);
+                        break;
+                    case 3:
+                        Change_Person_Date(census);
+                        break;
+                    case 0:
+                        break;
+                    default:
+                        break;
+                }
         }
 
         static void Change_Person_OIB(Dictionary<string, (string, DateTime)> census)
         {
             Console.WriteLine("Unesi OIB koji želiš promijeniti:");
             string changeOIB = OIB_Length_Check();
-            int changeIt = 0;
+            int changeIt = 0, correct = 0;
             string newOIB = "";
             string tempName = "";
             DateTime tempDate = new DateTime();
+            string confirmation;
 
             if (census.ContainsKey(changeOIB))
                 foreach (var item in census)
                     if (changeOIB == item.Key)
                     {
-                        Console.WriteLine("Mijenja se OIB osobe " + item.Value.Item1 + " rođene " + item.Value.Item2.ToString("dd.MM.yyyy") + ".");
-                        Console.WriteLine("Unesi novi OIB:");
-                        newOIB = OIB_Length_Check();
-                        tempName = item.Value.Item1;
-                        tempDate = item.Value.Item2;
-                        changeIt = 1;
+                        while (0 == correct)
+                        {
+                            Console.WriteLine("Jeste li sigurni da želite promijeniti OIB stanovnika " + item.Value.Item1 + " rođenog " + item.Value.Item2.ToString("dd.MM.yyyy.") + "?");
+                            Console.WriteLine("(da/ne)");
+                            confirmation = Console.ReadLine();
+                            if ("da" == confirmation)
+                            {
+                                correct = 1;
+                                changeIt = 1;
+                                Console.WriteLine("Unesi novi OIB:");
+                                newOIB = OIB_Length_Check();
+                                tempName = item.Value.Item1;
+                                tempDate = item.Value.Item2;
+                            }
+                            else if ("ne" == confirmation)
+                            {
+                                correct = 1;
+                                changeIt = 2;
+                            }
+                            else
+                                Console.WriteLine("Nepravilan unos, molimo ponovite (unesite 'da' ili 'ne'):");
+                        }
                     }
-
-                    else Console.WriteLine("Ne postoji osoba s tim OIB-om.");
 
             if (1 == changeIt)
             {
@@ -429,23 +504,43 @@ namespace ConsoleApp
                 census.Add(newOIB, (tempName, tempDate));
                 Console.WriteLine("OIB je promijenjen.");
             }
+            else if (2 == changeIt) Console.WriteLine("Povratak na glavni izbornik.");
+            else Console.WriteLine("Ne postoji osoba s tim OIB-om.");
         }
 
         static void Change_Person_Name(Dictionary<string, (string, DateTime)> census)
         {
             Console.WriteLine("Unesi OIB stanovnika kojem želiš promijeniti ime i prezime:");
             string changeOIB = OIB_Length_Check();
+            string confirmation;
+            int correct = 0;
 
             if (census.ContainsKey(changeOIB))
             {
                 foreach (var item in census)
                     if (changeOIB == item.Key)
                     {
-                        Console.WriteLine("Mijenja se ime i prezime osobe " + item.Value.Item1 + " rođene " + item.Value.Item2.ToString("dd.MM.yyyy") + ".");
-                        Console.WriteLine("Unesi novo ime:");
-                        string newName = Name_Space_Check();
-                        census[item.Key] = (newName, item.Value.Item2);
-                        Console.WriteLine("Ime je promijenjeno u " + newName + ".");
+                        while (0 == correct)
+                        {
+                            Console.WriteLine("Jeste li sigurni da želite promijeniti ime stanovnika " + item.Value.Item1 + " rođenog " + item.Value.Item2.ToString("dd.MM.yyyy.") + "?");
+                            Console.WriteLine("(da/ne)");
+                            confirmation = Console.ReadLine();
+                            if ("da" == confirmation)
+                            {
+                                correct = 1;
+                                Console.WriteLine("Unesi novo ime:");
+                                string newName = Name_Space_Check();
+                                census[item.Key] = (newName, item.Value.Item2);
+                                Console.WriteLine("Ime je promijenjeno u " + newName + ".");
+                            }
+                            else if ("ne" == confirmation)
+                            {
+                                correct = 1;
+                                Console.WriteLine("Povratak na glavni izbornik.");
+                            }
+                            else
+                                Console.WriteLine("Nepravilan unos, molimo ponovite (unesite 'da' ili 'ne'):");
+                        }
                     }
             }
             else Console.WriteLine("Ne postoji osoba s tim OIB-om.");
@@ -455,17 +550,35 @@ namespace ConsoleApp
         {
             Console.WriteLine("Unesi OIB stanovnika kojem želiš promijeniti datum rođenja:");
             string changeOIB = OIB_Length_Check();
+            string confirmation;
+            int correct = 0;
 
             if (census.ContainsKey(changeOIB))
             {
                 foreach (var item in census)
                     if (changeOIB == item.Key)
                     {
-                        Console.WriteLine("Mijenja se datum rođenja osobe " + item.Value.Item1 + " rođene " + item.Value.Item2.ToString("dd.MM.yyyy") + ".");
-                        Console.WriteLine("Unesi novi datum rođenja:");
-                        DateTime newDate = Date_Check();
-                        census[item.Key] = (item.Value.Item1, newDate);
-                        Console.WriteLine("Datum rođenja je promijenjen u " + newDate + ".");
+                        while (0 == correct)
+                        {
+                            Console.WriteLine("Jeste li sigurni da želite promijeniti datum rođenja stanovnika " + item.Value.Item1 + " rođenog " + item.Value.Item2.ToString("dd.MM.yyyy.") + "?");
+                            Console.WriteLine("(da/ne)");
+                            confirmation = Console.ReadLine();
+                            if ("da" == confirmation)
+                            {
+                                correct = 1;
+                                Console.WriteLine("Unesi novi datum rođenja:");
+                                DateTime newDate = Date_Check();
+                                census[item.Key] = (item.Value.Item1, newDate);
+                                Console.WriteLine("Datum rođenja je promijenjen u " + newDate.ToString("dd.MM.yyyy.") + ".");
+                            }
+                            else if ("ne" == confirmation)
+                            {
+                                correct = 1;
+                                Console.WriteLine("Povratak na glavni izbornik.");
+                            }
+                            else
+                                Console.WriteLine("Nepravilan unos, molimo ponovite (unesite 'da' ili 'ne'):");
+                        }
                     }
             }
             else Console.WriteLine("Ne postoji osoba s tim OIB-om.");
@@ -539,7 +652,7 @@ namespace ConsoleApp
                 else unemployed++;
             }
             double employedRatio = Math.Round((double)employed / census.Count, 4);
-            Console.WriteLine("Postotak zaposlenih je " + employedRatio * 100 + "%, a nezaposlenih " + (1 - employedRatio) * 100 + "%.");
+            Console.WriteLine("\nPostotak zaposlenih je " + employedRatio * 100 + "%, a nezaposlenih " + (1 - employedRatio) * 100 + "%.");
         }
 
         static void Most_Common_Name(Dictionary<string, (string, DateTime)> census, int choice)
@@ -569,8 +682,8 @@ namespace ConsoleApp
 
             SortedNames.Sort((a, b) => b.Item2.CompareTo(a.Item2));
 
-            if (0 == choice) Console.WriteLine("Najčešće ime je " + SortedNames[0].Item1 + ", pojavljuje se " + SortedNames[0].Item2 + " puta.");
-            if (1 == choice) Console.WriteLine("Najčešće prezime je " + SortedNames[0].Item1 + ", pojavljuje se " + SortedNames[0].Item2 + " puta.");
+            if (0 == choice) Console.WriteLine("\nNajčešće ime je " + SortedNames[0].Item1 + ", pojavljuje se " + SortedNames[0].Item2 + " puta.");
+            if (1 == choice) Console.WriteLine("\nNajčešće prezime je " + SortedNames[0].Item1 + ", pojavljuje se " + SortedNames[0].Item2 + " puta.");
         }
 
         static void Most_Common_Date(Dictionary<string, (string, DateTime)> census)
@@ -599,11 +712,8 @@ namespace ConsoleApp
 
             SortedDates.Sort((a, b) => b.Item2.CompareTo(a.Item2));
 
-            Console.WriteLine("Najčešći datum rođenja je " + SortedDates[0].Item1.ToString("dd.MM.yyyy") + ", na njega je rođeno " + SortedDates[0].Item2 + " ljudi.");
+            Console.WriteLine("\nNajčešći datum rođenja je " + SortedDates[0].Item1.ToString("dd.MM.yyyy.") + ", na njega je rođeno " + SortedDates[0].Item2 + " stanovnika.");
         }
-
-
-
 
         static void Seasons(Dictionary<string, (string, DateTime)> census)
         {
@@ -620,7 +730,7 @@ namespace ConsoleApp
 
             List<(string, int)> SeasonsList = new List<(string, int)>();
 
-            SeasonsList.Add(("Zima", winter));
+            SeasonsList.Add(("\nZima", winter));
             SeasonsList.Add(("Proljeće", spring));
             SeasonsList.Add(("Ljeto", summer));
             SeasonsList.Add(("Jesen", autumn));
@@ -629,7 +739,7 @@ namespace ConsoleApp
 
             foreach (var item in SeasonsList)
             {
-                Console.WriteLine(item.Item1 + ": " + item.Item2 + " ljudi.");
+                Console.WriteLine(item.Item1 + ": " + item.Item2 + " stanovnika.");
             }
         }
 
@@ -681,13 +791,14 @@ namespace ConsoleApp
             }
 
             var yearsAvg = Math.Round((double)(daysOldTotal / census.Count) / 365.25, 2);
-            Console.WriteLine("Prosjek godina stanovništva je " + 100 * yearsAvg / 100 + " godina.");
+            Console.WriteLine("\nProsjek godina stanovništva je " + 100 * yearsAvg / 100 + " godina.");
         }
 
         static void Median_Age(Dictionary<string, (string, DateTime)> census)
         {
             List<(string, string, DateTime)> sortedList = Transfer_to_List(census);
             sortedList.Sort((a, b) => a.Item3.CompareTo(b.Item3));
+
             TimeSpan age = DateTime.Now - sortedList[sortedList.Count / 2].Item3;
             TimeSpan age2 = DateTime.Now - sortedList[(sortedList.Count / 2) - 1].Item3;
             double medianAge;
@@ -697,7 +808,7 @@ namespace ConsoleApp
             else
                 medianAge = Math.Round((age.Days + age2.Days) / 2 / 365.25, 2);
 
-            Console.WriteLine("Medijan godina stanovništva je " + medianAge + ".");
+            Console.WriteLine("\nMedijan godina stanovništva je " + medianAge + ".");
         }
     }
 }
