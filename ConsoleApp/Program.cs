@@ -10,20 +10,20 @@ namespace ConsoleApp
             var census = new Dictionary<string, (string nameAndSurname, DateTime dateOfBirth)>(){};
             int exit = 0, choice;
 
-            census.Add("11111111111", ("Ante Antimon", new DateTime(1980, 11, 1)));
+            census.Add("44444444444", ("Ante Antimon", new DateTime(1980, 11, 1)));
             census.Add("22222222222", ("Ivan Horvat", new DateTime(2007, 10, 3)));
             census.Add("33333333333", ("Ivana Horvat", new DateTime(1940, 10, 10)));
-            census.Add("44444444444", ("Stipan Prezime", new DateTime(2000, 10, 3)));
+            census.Add("11111111111", ("Stipan Prezime", new DateTime(2000, 10, 3)));
             census.Add("44444443445", ("Šime Šimić", new DateTime(2007, 1, 3)));
-            census.Add("44444444445", ("Ivan Ivanović", new DateTime(1990, 11, 4)));
-            census.Add("44444544445", ("Petra Horvat", new DateTime(1995, 11, 11)));
+            census.Add("54644944448", ("Ivan Ivanović", new DateTime(1990, 11, 4)));
+            census.Add("44444944448", ("Petra Horvat", new DateTime(1995, 11, 11)));
             census.Add("44444644445", ("Jan Mlakar", new DateTime(1980, 8, 31)));
             census.Add("44444744445", ("Enver Hoxha", new DateTime(1950, 10, 3)));
             census.Add("44444844445", ("Ivan Horvat", new DateTime(2007, 10, 3)));
-            census.Add("44444944445", ("Björk Guðdóttir", new DateTime(1995, 8, 7)));
-            census.Add("44444944448", ("José Quiñones", new DateTime(1985, 4, 7)));
+            census.Add("74444944445", ("Björk Guðdóttir", new DateTime(1995, 8, 7)));
+            census.Add("14444944448", ("José Quiñones", new DateTime(1985, 4, 7)));
             census.Add("54444944448", ("Ryūnosuke Shōji", new DateTime(1985, 4, 7)));
-            census.Add("54644944448", ("D'Angelo Danté", new DateTime(1985, 4, 7)));
+            census.Add("44444944548", ("D'Angelo Danté", new DateTime(1985, 4, 7)));
 
             while (1 != exit)
             {
@@ -40,7 +40,7 @@ namespace ConsoleApp
                 Console.WriteLine("9 - Statistika");
                 Console.WriteLine("0 - Izlaz iz aplikacije\n");
 
-                int.TryParse(Console.ReadLine(), out choice);
+                int.TryParse(Console.ReadLine().Trim(), out choice);
 
                 switch (choice)
                 {
@@ -88,7 +88,7 @@ namespace ConsoleApp
             do
             {
                 repeat = 0;
-                findOIB = (Console.ReadLine());
+                findOIB = (Console.ReadLine().Trim());
 
                 if (11 != findOIB.Length)
                 {
@@ -124,7 +124,7 @@ namespace ConsoleApp
             do
             {
                 repeat = 0;
-                findName = (Console.ReadLine());
+                findName = (Console.ReadLine()).Trim();
 
                 if (!Name_Letters_Check(findName)) { 
                     Console.WriteLine("Ime mora sadržavati isključivo slova i razmake! Unesite ga ispočetka:");
@@ -161,7 +161,7 @@ namespace ConsoleApp
             do
             {
                 repeat = 0;
-                dateOfBirth = DateTime.Parse(Console.ReadLine());
+                dateOfBirth = DateTime.Parse(Console.ReadLine().Trim());
 
                 if (dateOfBirth > DateTime.Now)
                 {
@@ -185,7 +185,7 @@ namespace ConsoleApp
                 Console.WriteLine("3 - Ispis stanovništva po datumu rođenja silazno");
                 Console.WriteLine("0 - Povratak na glavni izbornik");
 
-                int.TryParse(Console.ReadLine(), out subchoice);
+                int.TryParse(Console.ReadLine().Trim(), out subchoice);
 
                 switch (subchoice)
                 {
@@ -364,7 +364,7 @@ namespace ConsoleApp
                     {
                         Console.WriteLine("Jeste li sigurni da želite obrisati stanovnika " + item.Value.Item1 + " rođenog " + item.Value.Item2.ToString("dd.MM.yyyy.") + "?");
                         Console.WriteLine("(da/ne)");
-                        confirmation = Console.ReadLine();
+                        confirmation = Console.ReadLine().Trim();
                         if ("da" == confirmation)
                         {
                             correct = 1;
@@ -414,7 +414,7 @@ namespace ConsoleApp
                 {
                     Console.WriteLine("Jeste li sigurni da želite obrisati stanovnika " + deleteName + " rođenog " + deleteDate.ToString("dd.MM.yyyy.") + "?");
                     Console.WriteLine("(da/ne)");
-                    confirmation = Console.ReadLine();
+                    confirmation = Console.ReadLine().Trim();
                     if ("da" == confirmation)
                     {
                         correct = 1;
@@ -439,13 +439,13 @@ namespace ConsoleApp
                         Console.WriteLine(item.Key);
 
                 Console.WriteLine("Upiši OIB osobe koju želiš obrisati:");
-                OIBToDelete = (Console.ReadLine());
+                OIBToDelete = (Console.ReadLine().Trim());
 
                 while (0 == correct)
                 {
                     Console.WriteLine("Jeste li sigurni da želite obrisati stanovnika " + deleteName + " rođenog " + deleteDate.ToString("dd.MM.yyyy.") + "?");
                     Console.WriteLine("(da/ne)");
-                    confirmation = Console.ReadLine();
+                    confirmation = Console.ReadLine().Trim();
                     if ("da" == confirmation)
                     {
                         correct = 1;
@@ -471,7 +471,7 @@ namespace ConsoleApp
             {
                 Console.WriteLine("Jeste li sigurni da želite obrisati cijeli popis stanovništva??");
                 Console.WriteLine("(da/ne)");
-                string confirmation = Console.ReadLine();
+                string confirmation = Console.ReadLine().Trim();
                 if ("da" == confirmation)
                 {
 
@@ -498,7 +498,7 @@ namespace ConsoleApp
             Console.WriteLine("3 - Uredi datum rođenja");
             Console.WriteLine("0 - Povratak na glavni izbornik");
 
-            int.TryParse(Console.ReadLine(), out subchoice);
+            int.TryParse(Console.ReadLine().Trim(), out subchoice);
 
                 switch (subchoice)
                 {
@@ -536,7 +536,7 @@ namespace ConsoleApp
                         {
                             Console.WriteLine("Jeste li sigurni da želite promijeniti OIB stanovnika " + item.Value.Item1 + " rođenog " + item.Value.Item2.ToString("dd.MM.yyyy.") + "?");
                             Console.WriteLine("(da/ne)");
-                            confirmation = Console.ReadLine();
+                            confirmation = Console.ReadLine().Trim();
                             if ("da" == confirmation)
                             {
                                 correct = 1;
@@ -582,7 +582,7 @@ namespace ConsoleApp
                         {
                             Console.WriteLine("Jeste li sigurni da želite promijeniti ime stanovnika " + item.Value.Item1 + " rođenog " + item.Value.Item2.ToString("dd.MM.yyyy.") + "?");
                             Console.WriteLine("(da/ne)");
-                            confirmation = Console.ReadLine();
+                            confirmation = Console.ReadLine().Trim();
                             if ("da" == confirmation)
                             {
                                 correct = 1;
@@ -620,7 +620,7 @@ namespace ConsoleApp
                         {
                             Console.WriteLine("Jeste li sigurni da želite promijeniti datum rođenja stanovnika " + item.Value.Item1 + " rođenog " + item.Value.Item2.ToString("dd.MM.yyyy.") + "?");
                             Console.WriteLine("(da/ne)");
-                            confirmation = Console.ReadLine();
+                            confirmation = Console.ReadLine().Trim();
                             if ("da" == confirmation)
                             {
                                 correct = 1;
@@ -659,7 +659,7 @@ namespace ConsoleApp
                 Console.WriteLine("9 - Medijan godina");
                 Console.WriteLine("0 - Povratak na glavni izbornik");
 
-                int.TryParse(Console.ReadLine(), out subchoice);
+                int.TryParse(Console.ReadLine().Trim(), out subchoice);
 
                 switch (subchoice)
                 {
@@ -788,7 +788,7 @@ namespace ConsoleApp
 
             List<(string, int)> SeasonsList = new List<(string, int)>();
 
-            SeasonsList.Add(("\nZima", winter));
+            SeasonsList.Add(("Zima", winter));
             SeasonsList.Add(("Proljeće", spring));
             SeasonsList.Add(("Ljeto", summer));
             SeasonsList.Add(("Jesen", autumn));
