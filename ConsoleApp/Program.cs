@@ -23,7 +23,7 @@ namespace ConsoleApp
             census.Add("74444944445", ("Björk Guðdóttir", new DateTime(1995, 8, 7)));
             census.Add("14444944448", ("José Quiñones", new DateTime(1985, 4, 7)));
             census.Add("54444944448", ("Ryūnosuke Shōji", new DateTime(1985, 4, 7)));
-            census.Add("44444944548", ("D'Angelo Danté", new DateTime(1985, 4, 7)));
+            census.Add("44444944548", ("D'Angelo Danté", new DateTime(2007, 10, 3)));
 
             while (1 != exit)
             {
@@ -127,7 +127,7 @@ namespace ConsoleApp
                 findName = (Console.ReadLine()).Trim();
 
                 if (!Name_Letters_Check(findName)) { 
-                    Console.WriteLine("Ime mora sadržavati isključivo latinična slova i razmake! Unesite ga ispočetka:");
+                    Console.WriteLine("Ime mora sadržavati isključivo latinična slova i pojedinačne razmake! Unesite ga ispočetka:");
                     repeat = 1;
                 }
 
@@ -138,7 +138,8 @@ namespace ConsoleApp
 
         static bool Name_Letters_Check(string name)
         {
-            int oneWord = 0;
+            int oneWord = 0, first = 0;
+            char previous = '0';
 
             foreach (var item in name)
                 if (!char.IsLetter(item) && item != ' ' && item != '\'')
@@ -147,6 +148,16 @@ namespace ConsoleApp
             foreach (var item in name)
                 if (' ' == item)
                     oneWord = 1;
+
+            foreach (var item in name)
+            {
+                if(0 == first)
+                    first = 1;
+                else if (' ' == item && ' ' == previous)
+                    return false;
+
+                previous = item;
+            }
 
             if (0 == oneWord) return false;
 
