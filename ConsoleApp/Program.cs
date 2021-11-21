@@ -38,6 +38,7 @@ namespace ConsoleApp
                 Console.WriteLine("7 - Brisanje svih stanovnika");
                 Console.WriteLine("8 - Uređivanje stanovnika");
                 Console.WriteLine("9 - Statistika");
+                Console.WriteLine("10 - Sortiranje popisa");
                 Console.WriteLine("0 - Izlaz iz aplikacije\n");
 
                 int.TryParse(Console.ReadLine().Trim(), out choice);
@@ -70,6 +71,9 @@ namespace ConsoleApp
                         break;
                     case 9:
                         Statistics(census);
+                        break;
+                    case 10:
+                        Sort_Census(census);
                         break;
                     case 0:
                         exit = 1;
@@ -334,7 +338,7 @@ namespace ConsoleApp
             int correct = 0;
             while (0 == correct)
             {
-                Console.WriteLine("Jeste li sigurni da želite unijeti novog stanovnika?");
+                Console.WriteLine("\nJeste li sigurni da želite unijeti novog stanovnika?");
                 Console.WriteLine("(da/ne)");
                 var confirmation = Console.ReadLine().Trim();
 
@@ -376,7 +380,6 @@ namespace ConsoleApp
             }
         }
 
-
         static void Delete_OIB(Dictionary<string, (string, DateTime)> census)
         {
             Console.WriteLine("Unesi OIB:");
@@ -396,7 +399,7 @@ namespace ConsoleApp
                 {
                     while (0 == correct)
                     {
-                        Console.WriteLine("Jeste li sigurni da želite obrisati stanovnika " + item.Value.Item1 + " rođenog " + item.Value.Item2.ToString("dd.MM.yyyy.") + "?");
+                        Console.WriteLine("\nJeste li sigurni da želite obrisati stanovnika " + item.Value.Item1 + " rođenog " + item.Value.Item2.ToString("dd.MM.yyyy.") + "?");
                         Console.WriteLine("(da/ne)");
                         confirmation = Console.ReadLine().Trim();
                         if ("da" == confirmation)
@@ -446,7 +449,7 @@ namespace ConsoleApp
             {
                 while (0 == correct)
                 {
-                    Console.WriteLine("Jeste li sigurni da želite obrisati stanovnika " + deleteName + " rođenog " + deleteDate.ToString("dd.MM.yyyy.") + "?");
+                    Console.WriteLine("\nJeste li sigurni da želite obrisati stanovnika " + deleteName + " rođenog " + deleteDate.ToString("dd.MM.yyyy.") + "?");
                     Console.WriteLine("(da/ne)");
                     confirmation = Console.ReadLine().Trim();
                     if ("da" == confirmation)
@@ -477,7 +480,7 @@ namespace ConsoleApp
 
                 while (0 == correct)
                 {
-                    Console.WriteLine("Jeste li sigurni da želite obrisati stanovnika " + deleteName + " rođenog " + deleteDate.ToString("dd.MM.yyyy.") + "?");
+                    Console.WriteLine("\nJeste li sigurni da želite obrisati stanovnika " + deleteName + " rođenog " + deleteDate.ToString("dd.MM.yyyy.") + "?");
                     Console.WriteLine("(da/ne)");
                     confirmation = Console.ReadLine().Trim();
                     if ("da" == confirmation)
@@ -503,7 +506,7 @@ namespace ConsoleApp
 
             while (0 == correct)
             {
-                Console.WriteLine("Jeste li sigurni da želite obrisati cijeli popis stanovništva??");
+                Console.WriteLine("\nJeste li sigurni da želite obrisati cijeli popis stanovništva??");
                 Console.WriteLine("(da/ne)");
                 string confirmation = Console.ReadLine().Trim();
                 if ("da" == confirmation)
@@ -571,7 +574,7 @@ namespace ConsoleApp
                         {
                             if (0 == verified)
                             {
-                                Console.WriteLine("Jeste li sigurni da želite promijeniti OIB stanovnika " + item.Value.Item1 + " rođenog " + item.Value.Item2.ToString("dd.MM.yyyy.") + "?");
+                                Console.WriteLine("\nJeste li sigurni da želite promijeniti OIB stanovnika " + item.Value.Item1 + " rođenog " + item.Value.Item2.ToString("dd.MM.yyyy.") + "?");
                                 Console.WriteLine("(da/ne)");
                                 confirmation = Console.ReadLine().Trim();
                             }
@@ -633,7 +636,7 @@ namespace ConsoleApp
                     {
                         while (0 == correct)
                         {
-                            Console.WriteLine("Jeste li sigurni da želite promijeniti ime stanovnika " + item.Value.Item1 + " rođenog " + item.Value.Item2.ToString("dd.MM.yyyy.") + "?");
+                            Console.WriteLine("\nJeste li sigurni da želite promijeniti ime stanovnika " + item.Value.Item1 + " rođenog " + item.Value.Item2.ToString("dd.MM.yyyy.") + "?");
                             Console.WriteLine("(da/ne)");
                             confirmation = Console.ReadLine().Trim();
                             if ("da" == confirmation)
@@ -671,7 +674,7 @@ namespace ConsoleApp
                     {
                         while (0 == correct)
                         {
-                            Console.WriteLine("Jeste li sigurni da želite promijeniti datum rođenja stanovnika " + item.Value.Item1 + " rođenog " + item.Value.Item2.ToString("dd.MM.yyyy.") + "?");
+                            Console.WriteLine("\nJeste li sigurni da želite promijeniti datum rođenja stanovnika " + item.Value.Item1 + " rođenog " + item.Value.Item2.ToString("dd.MM.yyyy.") + "?");
                             Console.WriteLine("(da/ne)");
                             confirmation = Console.ReadLine().Trim();
                             if ("da" == confirmation)
@@ -921,6 +924,121 @@ namespace ConsoleApp
                 medianAge = Math.Round((age.Days + age2.Days) / 2 / 365.25, 2);
 
             Console.WriteLine("\nMedijan godina stanovništva je " + medianAge + " godina.");
+        }
+
+        static void Sort_Census(Dictionary<string, (string, DateTime)> census)
+        {
+            int subchoice;
+
+            Console.WriteLine("\nIzaberite način sortiranja:");
+            Console.WriteLine("1 - Abecedno po prezimenu");
+            Console.WriteLine("2 - Po datumu rođenja uzlazno");
+            Console.WriteLine("3 - Po datumu rođenja silazno");
+            Console.WriteLine("0 - Povratak na glavni izbornik");
+
+            int.TryParse(Console.ReadLine().Trim(), out subchoice);
+
+            switch (subchoice)
+            {
+                case 1:
+                    Sort_Name(census);
+                    break;
+                case 2:
+                    Sort_Date(census, 1);
+                    break;
+                case 3:
+                    Sort_Date(census, 2);
+                    break;
+                case 0:
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        static void Sort_Date(Dictionary<string, (string, DateTime)> census, int choice)
+        {
+            int verified = 0;
+
+            List<(string, string, DateTime)> sortedList = Transfer_to_List(census);
+            if (1 == choice)
+                sortedList.Sort((a, b) => a.Item3.CompareTo(b.Item3));
+            if (2 == choice)
+                sortedList.Sort((a, b) => b.Item3.CompareTo(a.Item3));
+
+            while (0 == verified)
+            {
+                Console.WriteLine("\nJeste li sigurni da želite sortirati popis po datumu rođenja?");
+                Console.WriteLine("(da/ne)");
+                var confirmation = Console.ReadLine().Trim();
+
+                if ("da" == confirmation)
+                {
+                    census.Clear();
+                    verified = 1;
+
+                    foreach (var item in sortedList)
+                        census.Add(item.Item1, (item.Item2, item.Item3));
+
+                    if (1 == choice)
+                        Console.WriteLine("\nStanovništvo je sortirano uzlazno po datumu rođenja.");
+                    if (2 == choice)
+                        Console.WriteLine("\nStanovništvo je sortirano silazno po datumu rođenja.");
+                }
+                else if ("ne" == confirmation)
+                {
+                    verified = 1;
+                    Console.WriteLine("Povratak na glavni izbornik.");
+                }
+                else
+                    Console.WriteLine("Nepravilan unos, molimo ponovite (unesite 'da' ili 'ne'):");
+            }
+        }
+
+        static void Sort_Name(Dictionary<string, (string, DateTime)> census)
+        {
+            int verified = 0;
+            string surname = "", name = "";
+
+            while (0 == verified)
+            {
+                Console.WriteLine("\nJeste li sigurni da želite sortirati popis abecedno po prezimenu?");
+                Console.WriteLine("(da/ne)");
+                var confirmation = Console.ReadLine().Trim();
+
+                if ("da" == confirmation)
+                {
+
+                    foreach (var item in census)
+                    {
+                        name = item.Value.Item1.Substring(0, item.Value.Item1.IndexOf(" "));
+                        surname = item.Value.Item1.Substring(item.Value.Item1.IndexOf(" ") + 1);
+                        census[item.Key] = (surname + " " + name, item.Value.Item2);
+                    }
+
+                    List<(string, string, DateTime)> sortedList = Transfer_to_List(census);
+                    sortedList.Sort((a, b) => a.Item2.CompareTo(b.Item2));
+
+
+                    census.Clear();
+                    verified = 1;
+
+                    foreach (var item in sortedList)
+                    {
+                        surname = item.Item2.Substring(0, item.Item2.IndexOf(" "));
+                        name = item.Item2.Substring(item.Item2.IndexOf(" ") + 1);
+                        census.Add(item.Item1, (name + " " + surname, item.Item3));
+                    }
+                    Console.WriteLine("\nStanovništvo je sortirano abecedno po prezimenu.");
+                }
+                else if ("ne" == confirmation)
+                {
+                    verified = 1;
+                    Console.WriteLine("Povratak na glavni izbornik.");
+                }
+                else
+                    Console.WriteLine("Nepravilan unos, molimo ponovite (unesite 'da' ili 'ne'):");
+            }
         }
     }
 }
